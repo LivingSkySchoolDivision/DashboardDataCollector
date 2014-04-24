@@ -72,6 +72,20 @@
       <DependentUpon>TopBandwidthUsers.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Proxy\JSON.aspx.cs">
+      <DependentUpon>JSON.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Proxy\JSON.aspx.designer.cs">
+      <DependentUpon>JSON.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Proxy\XML.aspx.cs">
+      <DependentUpon>XML.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Proxy\XML.aspx.designer.cs">
+      <DependentUpon>XML.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Template.Master.cs">
       <DependentUpon>Template.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -81,6 +95,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Proxy\JSON.aspx" />
+    <Content Include="Proxy\XML.aspx" />
     <Content Include="Template.Master" />
     <None Include="Properties\PublishProfiles\DashboardServer.pubxml" />
     <None Include="web.config.template" />
