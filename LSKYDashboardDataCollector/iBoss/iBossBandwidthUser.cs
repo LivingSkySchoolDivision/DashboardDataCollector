@@ -19,7 +19,7 @@ namespace LSKYDashboardDataCollector.iBoss
                 decimal ParsedValue = -1;
                 if (decimal.TryParse(GetJustNumbers(TotalBytesString), out ParsedValue))
                 {
-                    return ParsedValue;
+                    return Math.Round(ParsedValue, 2);
                 }
                 else
                 {

@@ -76,7 +76,7 @@ namespace LSKYDashboardDataCollector.iBoss
 
                         Response.Write("{");
                         Response.Write("\"Name\" : \"" + FormatUsername(user.Username) + "\",");
-                        Response.Write("\"Bytes\" : \"" + user.TotalKBPS + "\",");
+                        Response.Write("\"Bytes\" : \"" + user.TotalKBPS.ToString("N0") + "\",");
                         Response.Write("\"Packets\" : \"" + user.PacketCount + "\"");
                         Response.Write("}");
                         if (x < BandwidthUsers.Count - 1)
