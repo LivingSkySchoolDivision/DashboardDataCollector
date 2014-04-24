@@ -57,9 +57,18 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CiscoWireless\WirelessClients.aspx" />
     <Content Include="iBoss\TopBandwidthUsers.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CiscoWireless\WirelessClients.aspx.cs">
+      <DependentUpon>WirelessClients.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CiscoWireless\WirelessClients.aspx.designer.cs">
+      <DependentUpon>WirelessClients.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Common\CommonFunctions.cs" />
     <Compile Include="Common\CommonJSONParts.cs" />
     <Compile Include="Common\DDCConfiguration.cs" />
     <Compile Include="iBoss\iBossBandwidthUser.cs" />
@@ -72,6 +81,7 @@
       <DependentUpon>TopBandwidthUsers.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Proxy\CachedWebRequest.cs" />
     <Compile Include="Proxy\JSON.aspx.cs">
       <DependentUpon>JSON.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

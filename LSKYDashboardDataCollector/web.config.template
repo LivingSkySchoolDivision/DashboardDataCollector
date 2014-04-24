@@ -12,9 +12,23 @@
     </system.web>
   
   <appSettings>
-    <add key="iboss_url" value=""/>
-    <add key="iboss_username" value=""/>
-    <add key="iboss_password" value=""/>
+    
+    <!-- 
+      Address and credentials for iBoss. This user should be set up as a read only, non-administrator 
+    -->
+    <add key="iboss_url" value="" />
+    <add key="iboss_username" value="" />
+    <add key="iboss_password" value="" />
+    
+    <!-- 
+      Cisco wireless controller share information. Cisco wireless controller should be set to generate an excel 
+      log file into this share on a windows computer.
+      
+      The share should accessible without a password by the server that this is running on.
+      
+      An example of a value would be "\\127.0.0.1\CiscoLogs"
+    -->
+    <add key="cisco_wireless_path" value="" />
   </appSettings>
 
 </configuration>
