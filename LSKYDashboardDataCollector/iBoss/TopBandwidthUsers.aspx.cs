@@ -40,7 +40,7 @@ namespace LSKYDashboardDataCollector.iBoss
 
                         Response.Write("{");
                         Response.Write("\"Name\" : \"" + user.Username + "\",");
-                        Response.Write("\"Byes\" : \"" + user.TotalBytes + "\",");
+                        Response.Write("\"Bytes\" : \"" + user.TotalBytes + "\",");
                         Response.Write("\"Packets\" : \"" + user.PacketCount + "\"");
                         Response.Write("}");
                         if (x < BandwidthUsers.Count - 1)
