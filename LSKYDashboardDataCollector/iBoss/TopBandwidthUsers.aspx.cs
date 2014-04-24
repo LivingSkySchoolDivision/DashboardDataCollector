@@ -11,7 +11,38 @@ using System.Web.UI.WebControls;
 namespace LSKYDashboardDataCollector.iBoss
 {
     public partial class TopBandwidthUsers : System.Web.UI.Page
-    {      
+    {
+        // Matches certain usernames to more descriptive strings
+        private string FormatUsername(string givenUsername)
+        {
+            if (givenUsername == "*10.177.199.253")
+            {
+                return "Cisco VPN user(s)";
+            }
+
+            if (givenUsername == "*10.177.196.208")
+            {
+                return "mail.lskysd.ca";
+            }
+
+            if (givenUsername == "*10.177.194.224")
+            {
+                return "System Center";
+            }
+
+            if (
+                (givenUsername == "*10.177.196.166") ||
+                (givenUsername == "*10.177.196.167") ||
+                (givenUsername == "*10.177.196.168") ||
+                (givenUsername == "*10.177.196.169") 
+                )
+            {
+                return "Web0";
+            }
+
+            return givenUsername;
+        }
+
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -39,7 +70,7 @@ namespace LSKYDashboardDataCollector.iBoss
                         iBossBandwidthUser user = BandwidthUsers[x];
 
                         Response.Write("{");
-                        Response.Write("\"Name\" : \"" + user.Username + "\",");
+                        Response.Write("\"Name\" : \"" + FormatUsername(user.Username) + "\",");
                         Response.Write("\"Bytes\" : \"" + user.TotalBytes + "\",");
                         Response.Write("\"Packets\" : \"" + user.PacketCount + "\"");
                         Response.Write("}");
