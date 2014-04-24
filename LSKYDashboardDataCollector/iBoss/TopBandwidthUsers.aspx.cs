@@ -40,6 +40,11 @@ namespace LSKYDashboardDataCollector.iBoss
                 return "Web0";
             }
 
+            if (givenUsername.StartsWith("*"))
+            {
+                return givenUsername.Substring(1, givenUsername.Length - 1);
+            }
+
             return givenUsername;
         }
 
@@ -60,7 +65,7 @@ namespace LSKYDashboardDataCollector.iBoss
             {
                 using (iBossConnection iBoss = new iBossConnection(iBossURL, iBossUsername, iBossPassword))
                 {
-                    List<iBossBandwidthUser> BandwidthUsers = iBoss.GetBandwidthConsumers().OrderByDescending(c => c.PacketCount).ToList<iBossBandwidthUser>();
+                    List<iBossBandwidthUser> BandwidthUsers = iBoss.GetBandwidthConsumers().OrderByDescending(c => c.TotalKBPS).ToList<iBossBandwidthUser>();
                     
                     Response.Write("\"Count\": " + BandwidthUsers.Count + ",");
                     Response.Write("\"TopBandwidthUsers\" : [");
@@ -71,7 +76,7 @@ namespace LSKYDashboardDataCollector.iBoss
 
                         Response.Write("{");
                         Response.Write("\"Name\" : \"" + FormatUsername(user.Username) + "\",");
-                        Response.Write("\"Bytes\" : \"" + user.TotalBytes + "\",");
+                        Response.Write("\"Bytes\" : \"" + user.TotalKBPS + "\",");
                         Response.Write("\"Packets\" : \"" + user.PacketCount + "\"");
                         Response.Write("}");
                         if (x < BandwidthUsers.Count - 1)

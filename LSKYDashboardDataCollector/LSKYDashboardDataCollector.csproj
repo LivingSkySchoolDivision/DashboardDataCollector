@@ -83,6 +83,13 @@
   <ItemGroup>
     <Content Include="Template.Master" />
     <None Include="Properties\PublishProfiles\DashboardServer.pubxml" />
+    <None Include="web.config.template" />
+    <None Include="web.config.Debug.template">
+      <DependentUpon>web.config.template</DependentUpon>
+    </None>
+    <None Include="web.config.Release.template">
+      <DependentUpon>web.config.template</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
