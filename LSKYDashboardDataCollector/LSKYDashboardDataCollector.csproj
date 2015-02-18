@@ -120,6 +120,39 @@
     <Compile Include="Proxy\XML.aspx.designer.cs">
       <DependentUpon>XML.aspx</DependentUpon>
     </Compile>
+    <Compile Include="SysAid\CategoryEntry.cs" />
+    <Compile Include="SysAid\JSONNewestTicket.aspx.cs">
+      <DependentUpon>JSONNewestTicket.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SysAid\JSONNewestTicket.aspx.designer.cs">
+      <DependentUpon>JSONNewestTicket.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SysAid\JSONOpenTicketsByCategory.aspx.cs">
+      <DependentUpon>JSONOpenTicketsByCategory.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SysAid\JSONOpenTicketsByCategory.aspx.designer.cs">
+      <DependentUpon>JSONOpenTicketsByCategory.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SysAid\JSONOpenTicketsBySchool.aspx.cs">
+      <DependentUpon>JSONOpenTicketsBySchool.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SysAid\JSONOpenTicketsBySchool.aspx.designer.cs">
+      <DependentUpon>JSONOpenTicketsBySchool.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SysAid\JSONTicketCounts.aspx.cs">
+      <DependentUpon>JSONTicketCounts.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SysAid\JSONTicketCounts.aspx.designer.cs">
+      <DependentUpon>JSONTicketCounts.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SysAid\SchoolEntry.cs" />
+    <Compile Include="SysAid\ServiceRequest.cs" />
+    <Compile Include="SysAid\SysAidAsset.cs" />
+    <Compile Include="SysAid\SysAidUser.cs" />
     <Compile Include="Template.Master.cs">
       <DependentUpon>Template.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -131,6 +164,10 @@
   <ItemGroup>
     <Content Include="Proxy\JSON.aspx" />
     <Content Include="Proxy\XML.aspx" />
+    <Content Include="SysAid\JSONNewestTicket.aspx" />
+    <Content Include="SysAid\JSONOpenTicketsByCategory.aspx" />
+    <Content Include="SysAid\JSONOpenTicketsBySchool.aspx" />
+    <Content Include="SysAid\JSONTicketCounts.aspx" />
     <Content Include="Template.Master" />
     <None Include="Properties\PublishProfiles\DashboardServer.pubxml" />
     <None Include="web.config.template" />
@@ -141,9 +178,7 @@
       <DependentUpon>web.config.template</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SysAid\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

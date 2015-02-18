@@ -24,5 +24,9 @@ namespace LSKYDashboardDataCollector.Common
             }
             return sb.ToString();
         }
+        public static string escapeCharacters(string input)
+        {
+            return input.Replace('"', '\'');
+        }
     }
 }

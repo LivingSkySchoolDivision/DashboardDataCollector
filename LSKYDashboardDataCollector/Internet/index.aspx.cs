@@ -12,7 +12,7 @@ namespace LSKYDashboardDataCollector.CommunityNet
     public partial class Internet : System.Web.UI.Page
     {
         /// Connect to a website. If the website connection worked, then the internet connection is working - if not, then there may be issues
-
+        
         private string BoolToYesOrNo(bool thisBool)
         {
             if (thisBool)
@@ -54,10 +54,8 @@ namespace LSKYDashboardDataCollector.CommunityNet
                 {
                     return false;
                 }
-
-
+                
                 // Regardless of the status code returned, if we got a code back, the Internet is probably accessible
-
                 return true;
             }
             catch (WebException ex)
@@ -78,7 +76,6 @@ namespace LSKYDashboardDataCollector.CommunityNet
             }
             
         }
-
 
         protected void Page_Load(object sender, EventArgs e)
         {   
