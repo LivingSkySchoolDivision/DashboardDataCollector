@@ -58,6 +58,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CiscoWireless\WirelessClients.aspx" />
+    <Content Include="General\JSONClientInfo.aspx" />
+    <Content Include="General\JSONTime.aspx" />
+    <Content Include="Internet\index.aspx" />
     <Content Include="iBoss\TopBandwidthUsers.aspx" />
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +74,27 @@
     <Compile Include="Common\CommonFunctions.cs" />
     <Compile Include="Common\CommonJSONParts.cs" />
     <Compile Include="Common\DDCConfiguration.cs" />
+    <Compile Include="General\JSONClientInfo.aspx.cs">
+      <DependentUpon>JSONClientInfo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="General\JSONClientInfo.aspx.designer.cs">
+      <DependentUpon>JSONClientInfo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="General\JSONTime.aspx.cs">
+      <DependentUpon>JSONTime.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="General\JSONTime.aspx.designer.cs">
+      <DependentUpon>JSONTime.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Internet\index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Internet\index.aspx.designer.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+    </Compile>
     <Compile Include="iBoss\iBossBandwidthUser.cs" />
     <Compile Include="iBoss\iBossConnection.cs" />
     <Compile Include="iBoss\TopBandwidthUsers.aspx.cs">
@@ -117,7 +141,9 @@
       <DependentUpon>web.config.template</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="SysAid\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

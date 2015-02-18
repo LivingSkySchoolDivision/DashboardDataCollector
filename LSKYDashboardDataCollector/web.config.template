@@ -29,6 +29,15 @@
       An example of a value would be "\\127.0.0.1\CiscoLogs"
     -->
     <add key="cisco_wireless_path" value="" />
+   
   </appSettings>
+
+  <connectionStrings>
+    
+    <!--
+      Connection string to access the SysAid database
+    -->
+    <add name="SysAidDatabase" connectionString="CONNECTIONSTRINGGOESHERE" providerName="System.Data.SqlClient" />
+  </connectionStrings>
 
 </configuration>
