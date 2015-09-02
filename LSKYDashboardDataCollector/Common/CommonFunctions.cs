@@ -24,9 +24,23 @@ namespace LSKYDashboardDataCollector.Common
             }
             return sb.ToString();
         }
+
         public static string escapeCharacters(string input)
         {
             return input.Replace('"', '\'');
+        }
+        public static bool ParseBool(string thisValue)
+        {
+            if (String.IsNullOrEmpty(thisValue))
+            {
+                return false;
+            }
+            else
+            {
+                bool parsedBool = false;
+                bool.TryParse(thisValue, out parsedBool);
+                return parsedBool;
+            }
         }
     }
 }

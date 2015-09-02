@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using LSKYDashboardDataCollector.Common;
 
 namespace LSKYDashboardDataCollector.SysAid
 {
@@ -34,6 +35,19 @@ namespace LSKYDashboardDataCollector.SysAid
         public string timeClosedString { get; set; }
 
         public bool isClosed { get; set; }
+
+        /// <summary>
+        /// Returns the time between when the ticket was entered and when it was modified or closed
+        /// </summary>
+        public TimeSpan ResponseTime
+        {
+            get
+            {
+                return this.timeUpdated.Subtract(this.timeInserted);
+                
+
+            }
+        }
 
         public DateTime timeInserted
         {
@@ -100,11 +114,6 @@ namespace LSKYDashboardDataCollector.SysAid
                 return returnMe;
 
             }
-
-            set
-            {
-                timeClosedString = value.ToString();
-            }
         }
 
         public ServiceRequest(int id, string location, int locationID, string urgency, string priority, string status, string computerID, string cat_1, string cat_2, string cat_3,
@@ -161,7 +170,7 @@ namespace LSKYDashboardDataCollector.SysAid
                     int locationID = -1;
                     int.TryParse(dataReader["location_id"].ToString().Trim(), out locationID);
 
-                    bool closed = int.Parse(dataReader["status_detail"].ToString().Trim()) > 0;
+                    bool closed = CommonFunctions.ParseBool(dataReader["status_detail"].ToString().Trim());
 
                     returnMe.Add(new ServiceRequest(
                             int.Parse(dataReader["id"].ToString().Trim()),
@@ -214,8 +223,8 @@ namespace LSKYDashboardDataCollector.SysAid
                 {
                     int locationID = -1;
                     int.TryParse(dataReader["location_id"].ToString().Trim(), out locationID);
-
-                    bool closed = int.Parse(dataReader["status_detail"].ToString().Trim()) > 0;
+                    
+                    bool closed = CommonFunctions.ParseBool(dataReader["status_detail"].ToString().Trim());
 
                     returnMe.Add(new ServiceRequest(
                             int.Parse(dataReader["id"].ToString().Trim()),
@@ -266,11 +275,8 @@ namespace LSKYDashboardDataCollector.SysAid
                     int locationID = -1;
                     int.TryParse(dataReader["location_id"].ToString().Trim(), out locationID);
 
-                    bool closed = false;
-                    if (int.Parse(dataReader["status_detail"].ToString().Trim()) > 0)
-                    {
-                        closed = true;
-                    }
+
+                    bool closed = CommonFunctions.ParseBool(dataReader["status_detail"].ToString().Trim());
 
                     returnMe.Add(new ServiceRequest(
                             int.Parse(dataReader["id"].ToString().Trim()),
@@ -323,11 +329,8 @@ namespace LSKYDashboardDataCollector.SysAid
                     int locationID = -1;
                     int.TryParse(dataReader["location_id"].ToString().Trim(), out locationID);
 
-                    bool closed = false;
-                    if (int.Parse(dataReader["status_detail"].ToString().Trim()) > 0)
-                    {
-                        closed = true;
-                    }
+                    
+                    bool closed = CommonFunctions.ParseBool(dataReader["status_detail"].ToString().Trim());
 
                     returnMe.Add(new ServiceRequest(
                             int.Parse(dataReader["id"].ToString().Trim()),
@@ -381,8 +384,8 @@ namespace LSKYDashboardDataCollector.SysAid
                 {
                     int locationID = -1;
                     int.TryParse(dataReader["location_id"].ToString().Trim(), out locationID);
-
-                    bool closed = int.Parse(dataReader["status_detail"].ToString().Trim()) > 0;
+                    
+                    bool closed = CommonFunctions.ParseBool(dataReader["status_detail"].ToString().Trim());
 
                     returnMe.Add(new ServiceRequest(
                             int.Parse(dataReader["id"].ToString().Trim()),
@@ -414,9 +417,7 @@ namespace LSKYDashboardDataCollector.SysAid
             return returnMe;
 
         }
-
-
-
+        
         public static List<ServiceRequest> loadNewestOpenServiceRequests(SqlConnection connection, int count)
         {
             List<ServiceRequest> returnMe = new List<ServiceRequest>();
@@ -436,8 +437,8 @@ namespace LSKYDashboardDataCollector.SysAid
                 {
                     int locationID = -1;
                     int.TryParse(dataReader["location_id"].ToString().Trim(), out locationID);
-
-                    bool closed = int.Parse(dataReader["status_detail"].ToString().Trim()) > 0;
+                    
+                    bool closed = CommonFunctions.ParseBool(dataReader["status_detail"].ToString().Trim());
 
                     returnMe.Add(new ServiceRequest(
                             int.Parse(dataReader["id"].ToString().Trim()),

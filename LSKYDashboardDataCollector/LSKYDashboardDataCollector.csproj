@@ -74,6 +74,7 @@
     <Compile Include="Common\CommonFunctions.cs" />
     <Compile Include="Common\CommonJSONParts.cs" />
     <Compile Include="Common\DDCConfiguration.cs" />
+    <Compile Include="Common\Extensions.cs" />
     <Compile Include="General\JSONClientInfo.aspx.cs">
       <DependentUpon>JSONClientInfo.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -152,6 +153,7 @@
     <Compile Include="SysAid\SchoolEntry.cs" />
     <Compile Include="SysAid\ServiceRequest.cs" />
     <Compile Include="SysAid\SysAidAsset.cs" />
+    <Compile Include="SysAid\SysAidCommon.cs" />
     <Compile Include="SysAid\SysAidUser.cs" />
     <Compile Include="Template.Master.cs">
       <DependentUpon>Template.Master</DependentUpon>

@@ -117,8 +117,7 @@ namespace LSKYDashboardDataCollector.SysAid
 
             List<ServiceRequest> allTickets = new List<ServiceRequest>();
 
-            String dbConnectionString = ConfigurationManager.ConnectionStrings["SysAidDatabase"].ConnectionString;
-            using (SqlConnection connection = new SqlConnection(dbConnectionString))
+            using (SqlConnection connection = new SqlConnection(SysAidCommon.dbConnectionString))
             {
                 allTickets = ServiceRequest.loadNewestOpenServiceRequests(connection, loadThisManyTickets);
             }

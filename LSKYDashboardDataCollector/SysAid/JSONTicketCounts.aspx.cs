@@ -30,9 +30,8 @@ namespace LSKYDashboardDataCollector.SysAid
             int ticketsCreated_Yesterday = 0;
             int ticketsCreated_Last7Days = 0;
             int ticketsCreated_Last30Days = 0;
-            
-            String dbConnectionString = ConfigurationManager.ConnectionStrings["SysAidDatabase"].ConnectionString;
-            using (SqlConnection connection = new SqlConnection(dbConnectionString))
+
+            using (SqlConnection connection = new SqlConnection(SysAidCommon.dbConnectionString))
             {
                 openTickets = ServiceRequest.loadOpenRequestCount(connection);
                 closedTickets = ServiceRequest.loadClosedRequestCount(connection);
