@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace LSKYDashboardDataCollector.Common
@@ -41,6 +42,34 @@ namespace LSKYDashboardDataCollector.Common
                 bool.TryParse(thisValue, out parsedBool);
                 return parsedBool;
             }
+        }
+
+        /// <summary>
+        /// Remove special characters that JSON doesn't like
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string SanitizeForJSON(string input)
+        {
+            string working = input;
+
+            // If the first bunch of characters and last bunch of characters are a div, remove them
+            working = Regex.Replace(working, @"<div class=.*?ExternalClass.*?>", string.Empty);
+            if (working.Length > 6)
+            {
+                if (working.Substring(working.Length - 6, 6).ToLower() == "</div>")
+                {
+                    working = working.Substring(0, working.Length - 6);
+                }
+            }
+
+            // Remove garbage that sharepoint adds
+            working = working.Replace("<p>​</p>", "");
+
+            // Remove characters that JSON doesn't like
+            working = working.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\n", "").Replace("\r", "");
+
+            return working.Trim();
         }
     }
 }

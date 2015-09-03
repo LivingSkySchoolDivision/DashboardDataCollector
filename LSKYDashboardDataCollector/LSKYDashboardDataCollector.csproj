@@ -39,6 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -121,6 +122,15 @@
     <Compile Include="Proxy\XML.aspx.designer.cs">
       <DependentUpon>XML.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Sharepoint2013\Calendar.aspx.cs">
+      <DependentUpon>Calendar.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sharepoint2013\Calendar.aspx.designer.cs">
+      <DependentUpon>Calendar.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sharepoint2013\CalendarEvent.cs" />
+    <Compile Include="Sharepoint2013\Sharepoint2013CalendarParser.cs" />
     <Compile Include="SysAid\CategoryEntry.cs" />
     <Compile Include="SysAid\JSONNewestTicket.aspx.cs">
       <DependentUpon>JSONNewestTicket.aspx</DependentUpon>
@@ -166,6 +176,7 @@
   <ItemGroup>
     <Content Include="Proxy\JSON.aspx" />
     <Content Include="Proxy\XML.aspx" />
+    <Content Include="Sharepoint2013\Calendar.aspx" />
     <Content Include="SysAid\JSONNewestTicket.aspx" />
     <Content Include="SysAid\JSONOpenTicketsByCategory.aspx" />
     <Content Include="SysAid\JSONOpenTicketsBySchool.aspx" />
