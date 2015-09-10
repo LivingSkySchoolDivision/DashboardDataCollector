@@ -122,6 +122,13 @@
     <Compile Include="Proxy\XML.aspx.designer.cs">
       <DependentUpon>XML.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Sharepoint2013\Blog.aspx.cs">
+      <DependentUpon>Blog.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sharepoint2013\Blog.aspx.designer.cs">
+      <DependentUpon>Blog.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Sharepoint2013\Calendar.aspx.cs">
       <DependentUpon>Calendar.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -129,8 +136,11 @@
     <Compile Include="Sharepoint2013\Calendar.aspx.designer.cs">
       <DependentUpon>Calendar.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Sharepoint2013\CalendarEvent.cs" />
+    <Compile Include="Sharepoint2013\SharepointBlog.cs" />
+    <Compile Include="Sharepoint2013\SharepointCalendarEvent.cs" />
     <Compile Include="Sharepoint2013\Sharepoint2013CalendarParser.cs" />
+    <Compile Include="Sharepoint2013\SharepointResponseRetriever.cs" />
+    <Compile Include="SharepointBlogPost.cs" />
     <Compile Include="SysAid\CategoryEntry.cs" />
     <Compile Include="SysAid\JSONNewestTicket.aspx.cs">
       <DependentUpon>JSONNewestTicket.aspx</DependentUpon>
@@ -176,6 +186,7 @@
   <ItemGroup>
     <Content Include="Proxy\JSON.aspx" />
     <Content Include="Proxy\XML.aspx" />
+    <Content Include="Sharepoint2013\Blog.aspx" />
     <Content Include="Sharepoint2013\Calendar.aspx" />
     <Content Include="SysAid\JSONNewestTicket.aspx" />
     <Content Include="SysAid\JSONOpenTicketsByCategory.aspx" />

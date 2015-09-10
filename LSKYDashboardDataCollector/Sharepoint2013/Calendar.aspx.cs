@@ -10,7 +10,7 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
 {
     public partial class Calendar : System.Web.UI.Page
     {
-        private string CalendarEventJSON(CalendarEvent ce)
+        private string CalendarEventJSON(SharepointCalendarEvent ce)
         {
             StringBuilder returnMe = new StringBuilder();
 
@@ -30,7 +30,6 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
             }
 
             returnMe.Append("{ ");
-            returnMe.Append("\"id\" : \"" + ce.ID + "\",");
             returnMe.Append("\"startdate\" : \"" + ce.EventStart.ToShortDateString() + "\",");
             returnMe.Append("\"startdatefriendly\" : \"" + StartDateFriendly + "\",");
             returnMe.Append("\"daysuntil\" : \"" + DaysUntil.ToString() + "\",");
@@ -67,12 +66,12 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
                 guid = Request.QueryString["guid"].ToString().Trim();
             }
             
-            List<CalendarEvent> allEvents = new List<CalendarEvent>();
+            List<SharepointCalendarEvent> allEvents = new List<SharepointCalendarEvent>();
             if (!string.IsNullOrEmpty(baseURL) && !string.IsNullOrEmpty(guid))
             {
                 try
                 {
-                    allEvents = Sharepoint2013CalendarParser.ParseRSSFeed(SharePointUsername, SharePointPassword, baseURL, guid);
+                    allEvents = Sharepoint2013CalendarParser.ParseRSSFeed(SharePointUsername, SharePointPassword, baseURL, guid).Where(ev => ev.EventStart >= DateTime.Today).ToList();
                 }
                 catch (Exception ex)
                 {
@@ -81,12 +80,12 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
             }
 
             // Sort into Today and Tomorrow lists
-            List<CalendarEvent> eventsToday = new List<CalendarEvent>();
-            List<CalendarEvent> eventsTomorrow = new List<CalendarEvent>();
-            List<CalendarEvent> eventsRightNow = new List<CalendarEvent>();
-            List<CalendarEvent> eventsUpcoming = new List<CalendarEvent>();
+            List<SharepointCalendarEvent> eventsToday = new List<SharepointCalendarEvent>();
+            List<SharepointCalendarEvent> eventsTomorrow = new List<SharepointCalendarEvent>();
+            List<SharepointCalendarEvent> eventsRightNow = new List<SharepointCalendarEvent>();
+            List<SharepointCalendarEvent> eventsUpcoming = new List<SharepointCalendarEvent>();
 
-            foreach (CalendarEvent ce in allEvents)
+            foreach (SharepointCalendarEvent ce in allEvents) /* disregard events that happened in the past */
             {
                 // Today
                 if ((ce.EventStart > DateTime.Today) && (ce.EventStart < DateTime.Today.AddDays(1)))
@@ -121,7 +120,7 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
             Response.Write("{\n");
 
             //Response.Write("\"XMLURL\": \"" + calendarXMLURL + "\",\n");
-
+            
             Response.Write("\"allevents\": [\n");
             for (int x = 0; x < allEvents.Count; x++)
             {
