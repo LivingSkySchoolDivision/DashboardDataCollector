@@ -7,11 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LSKYDashboardDataCollector.SysAid
+namespace LSKYDashboardDataCollector.Jira
 {
 
 
-    public partial class JSONOpenTicketsBySchool
+    public partial class NewestTickets
     {
     }
 }

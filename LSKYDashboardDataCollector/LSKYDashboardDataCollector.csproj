@@ -90,6 +90,7 @@
     <Compile Include="General\JSONTime.aspx.designer.cs">
       <DependentUpon>JSONTime.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Helpers.cs" />
     <Compile Include="Internet\index.aspx.cs">
       <DependentUpon>index.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -106,6 +107,38 @@
     <Compile Include="iBoss\TopBandwidthUsers.aspx.designer.cs">
       <DependentUpon>TopBandwidthUsers.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Jira\JiraIssue.cs" />
+    <Compile Include="Jira\JiraIssueRepository.cs" />
+    <Compile Include="Jira\JiraStatistics.cs" />
+    <Compile Include="Jira\NewestTickets.aspx.cs">
+      <DependentUpon>NewestTickets.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Jira\NewestTickets.aspx.designer.cs">
+      <DependentUpon>NewestTickets.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Jira\TicketCounts.aspx.cs">
+      <DependentUpon>TicketCounts.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Jira\TicketCounts.aspx.designer.cs">
+      <DependentUpon>TicketCounts.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Jira\TicketsByCategory.aspx.cs">
+      <DependentUpon>TicketsByCategory.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Jira\TicketsByCategory.aspx.designer.cs">
+      <DependentUpon>TicketsByCategory.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Jira\TicketsByFacility.aspx.cs">
+      <DependentUpon>TicketsByFacility.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Jira\TicketsByFacility.aspx.designer.cs">
+      <DependentUpon>TicketsByFacility.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Parsers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Proxy\CachedWebRequest.cs" />
     <Compile Include="Proxy\JSON.aspx.cs">
@@ -122,6 +155,7 @@
     <Compile Include="Proxy\XML.aspx.designer.cs">
       <DependentUpon>XML.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="Sharepoint2013\Blog.aspx.cs">
       <DependentUpon>Blog.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -140,41 +174,7 @@
     <Compile Include="Sharepoint2013\SharepointCalendarEvent.cs" />
     <Compile Include="Sharepoint2013\Sharepoint2013CalendarParser.cs" />
     <Compile Include="Sharepoint2013\SharepointResponseRetriever.cs" />
-    <Compile Include="SharepointBlogPost.cs" />
-    <Compile Include="SysAid\CategoryEntry.cs" />
-    <Compile Include="SysAid\JSONNewestTicket.aspx.cs">
-      <DependentUpon>JSONNewestTicket.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SysAid\JSONNewestTicket.aspx.designer.cs">
-      <DependentUpon>JSONNewestTicket.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SysAid\JSONOpenTicketsByCategory.aspx.cs">
-      <DependentUpon>JSONOpenTicketsByCategory.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SysAid\JSONOpenTicketsByCategory.aspx.designer.cs">
-      <DependentUpon>JSONOpenTicketsByCategory.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SysAid\JSONOpenTicketsBySchool.aspx.cs">
-      <DependentUpon>JSONOpenTicketsBySchool.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SysAid\JSONOpenTicketsBySchool.aspx.designer.cs">
-      <DependentUpon>JSONOpenTicketsBySchool.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SysAid\JSONTicketCounts.aspx.cs">
-      <DependentUpon>JSONTicketCounts.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SysAid\JSONTicketCounts.aspx.designer.cs">
-      <DependentUpon>JSONTicketCounts.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SysAid\SchoolEntry.cs" />
-    <Compile Include="SysAid\ServiceRequest.cs" />
-    <Compile Include="SysAid\SysAidAsset.cs" />
-    <Compile Include="SysAid\SysAidCommon.cs" />
-    <Compile Include="SysAid\SysAidUser.cs" />
+    <Compile Include="Sharepoint2013\SharepointBlogPost.cs" />
     <Compile Include="Template.Master.cs">
       <DependentUpon>Template.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -184,14 +184,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Jira\NewestTickets.aspx" />
+    <Content Include="Jira\TicketCounts.aspx" />
+    <Content Include="Jira\TicketsByCategory.aspx" />
+    <Content Include="Jira\TicketsByFacility.aspx" />
     <Content Include="Proxy\JSON.aspx" />
     <Content Include="Proxy\XML.aspx" />
     <Content Include="Sharepoint2013\Blog.aspx" />
     <Content Include="Sharepoint2013\Calendar.aspx" />
-    <Content Include="SysAid\JSONNewestTicket.aspx" />
-    <Content Include="SysAid\JSONOpenTicketsByCategory.aspx" />
-    <Content Include="SysAid\JSONOpenTicketsBySchool.aspx" />
-    <Content Include="SysAid\JSONTicketCounts.aspx" />
     <Content Include="Template.Master" />
     <None Include="Properties\PublishProfiles\DashboardServer.pubxml" />
     <None Include="web.config.template" />

@@ -30,14 +30,21 @@
     -->
     <add key="cisco_wireless_path" value="" />
    
+    <!-- 
+      Jira projects to load
+      Project names, as a list of strings, seperated by semicolens
+      "SIS;ICS;ICSLT;"
+    -->
+    <add key="jira_service_desk_project_keys" value="ONE;TWO;THREE;" />
+    
   </appSettings>
 
   <connectionStrings>
-    
+  
     <!--
-      Connection string to access the SysAid database
-    -->
-    <add name="SysAidDatabase" connectionString="CONNECTIONSTRINGGOESHERE" providerName="System.Data.SqlClient" />
+        Connection string to access the SysAid database
+      -->
+    <add name="Jira" connectionString="CONNECTIONSTRINGGOESHERE" providerName="System.Data.SqlClient" />
   </connectionStrings>
 
 </configuration>

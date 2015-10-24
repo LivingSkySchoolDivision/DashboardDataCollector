@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 
 namespace LSKYDashboardDataCollector.Common
@@ -40,6 +41,31 @@ namespace LSKYDashboardDataCollector.Common
                 }
             }
 
+        }
+
+        public static string ToCommaSeperatedListWithQuotes(this List<string> thisList)
+        {
+            if (thisList.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            if (thisList.Count == 1)
+            {
+                return thisList.First();
+            }
+
+            StringBuilder returnMe = new StringBuilder();
+            foreach (string thisString in thisList)
+            {
+                if (!string.IsNullOrEmpty(thisString))
+                {
+                    returnMe.Append("'" + thisString + "',");
+                }
+            }
+            returnMe.Remove(returnMe.Length - 1, 1);
+
+            return returnMe.ToString();
         }
     }
 }
