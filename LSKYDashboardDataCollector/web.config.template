@@ -12,13 +12,19 @@
     </system.web>
   
   <appSettings>
-    
+
     <!-- 
       Address and credentials for iBoss. This user should be set up as a read only, non-administrator 
     -->
     <add key="iboss_url" value="" />
     <add key="iboss_username" value="" />
     <add key="iboss_password" value="" />
+    
+    <!-- 
+      Credentials for Sharepoint - ideally this should be a user with read only access to just the things you need to display on a dashboard. 
+    -->
+    <add key="sharepoint_username" value="" />
+    <add key="sharepoint_password" value="" />
     
     <!-- 
       Cisco wireless controller share information. Cisco wireless controller should be set to generate an excel 

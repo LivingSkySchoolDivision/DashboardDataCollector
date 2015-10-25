@@ -19,6 +19,23 @@ namespace LSKYDashboardDataCollector
             {
                 return System.Configuration.ConfigurationManager.AppSettings["jira_service_desk_project_keys"].ToString().Split(';').ToList();
             }
-        } 
+        }
+
+
+        public static string SharePointUsername
+        {
+            get
+            {
+                return System.Configuration.ConfigurationManager.AppSettings["sharepoint_username"].ToString();
+            }
+        }
+
+        public static string SharePointPassword
+        {
+            get
+            {
+                return System.Configuration.ConfigurationManager.AppSettings["sharepoint_password"].ToString();
+            }
+        }
     }
 }

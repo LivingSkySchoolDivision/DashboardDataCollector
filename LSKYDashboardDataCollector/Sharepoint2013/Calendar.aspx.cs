@@ -49,10 +49,6 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
-            string SharePointUsername = @"lskysd\dashboard";
-            string SharePointPassword = "W3JoPAV14xY6D2cb6hZuSGYxgRULm";
-            
             // Parse data from the querystring
             string baseURL = string.Empty;
             if (!string.IsNullOrEmpty(Request.QueryString["url"]))
@@ -71,7 +67,7 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
             {
                 try
                 {
-                    allEvents = Sharepoint2013CalendarParser.ParseRSSFeed(SharePointUsername, SharePointPassword, baseURL, guid).Where(ev => ev.EventStart >= DateTime.Today).ToList();
+                    allEvents = Sharepoint2013CalendarParser.ParseRSSFeed(Settings.SharePointUsername, Settings.SharePointPassword, baseURL, guid).Where(ev => ev.EventStart >= DateTime.Today).ToList();
                 }
                 catch (Exception ex)
                 {

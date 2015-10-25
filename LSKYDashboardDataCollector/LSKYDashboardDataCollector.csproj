@@ -194,7 +194,9 @@
     <Content Include="Sharepoint2013\Calendar.aspx" />
     <Content Include="Template.Master" />
     <None Include="Properties\PublishProfiles\DashboardServer.pubxml" />
-    <None Include="web.config.template" />
+    <None Include="web.config.template">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="web.config.Debug.template">
       <DependentUpon>web.config.template</DependentUpon>
     </None>
