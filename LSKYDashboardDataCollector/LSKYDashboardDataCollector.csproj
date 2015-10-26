@@ -170,7 +170,7 @@
     <Compile Include="Sharepoint2013\Calendar.aspx.designer.cs">
       <DependentUpon>Calendar.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Sharepoint2013\SharepointBlog.cs" />
+    <Compile Include="Sharepoint2013\Sharepoint2013BlogParser.cs" />
     <Compile Include="Sharepoint2013\SharepointCalendarEvent.cs" />
     <Compile Include="Sharepoint2013\Sharepoint2013CalendarParser.cs" />
     <Compile Include="Sharepoint2013\SharepointResponseRetriever.cs" />

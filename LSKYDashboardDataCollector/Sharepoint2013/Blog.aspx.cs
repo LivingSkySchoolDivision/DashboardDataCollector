@@ -11,6 +11,14 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            // Parse data from the querystring
+            string baseURL = string.Empty;
+            if (!string.IsNullOrEmpty(Request.QueryString["url"]))
+            {
+                baseURL = Request.QueryString["url"].ToString().Trim();
+            }
+
+
 
         }
     }
