@@ -53,24 +53,30 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
                 }
 
                 // Extract dates and times from the description field
-                /*
-                <![CDATA[<div><b>Start Time:</b> 9/3/2015 1:30 PM</div>
-                <div><b>End Time:</b> 9/3/2015 3:30 PM</div>
-                <div><b>Description:</b> <div></div></div>
-                <div><b>Created:</b> 9/3/2015 11:01 AM</div>
-                <div><b>Created By:</b> Christeena Fisher</div>
-                <div><b>Modified:</b> 9/3/2015 11:01 AM</div>
-                <div><b>Modified By:</b> Christeena Fisher</div>
-                <div><b>Title:</b> Brenda</div>
-                <div><b>Version:</b> 1.0</div>
-                ]]>
-                    */
+                //<![CDATA[<div><b>Start Time:</b> 9/3/2015 1:30 PM</div>
+                //<div><b>End Time:</b> 9/3/2015 3:30 PM</div>
+                //<div><b>Description:</b> <div></div></div>
+                //<div><b>Created:</b> 9/3/2015 11:01 AM</div>
+                //<div><b>Created By:</b> Christeena Fisher</div>
+                //<div><b>Modified:</b> 9/3/2015 11:01 AM</div>
+                //<div><b>Modified By:</b> Christeena Fisher</div>
+                //<div><b>Title:</b> Brenda</div>
+                //<div><b>Version:</b> 1.0</div>
+                //]]>
+
+                // There is a known bug in Sharepoint that appears to affect our system, where
+                // if a calendar even is marked as "All Day", the time is incorrectly read from the database 
+                // and is displayed in GMT regardless of what time zone it should be in.
+                // We need to detect this in an event, and adjust the time for that event accordinly.
+
                 string descriptionBlob = item.Summary.Text;
 
                 DateTime startDate = DateTime.MinValue;
                 DateTime endDate = DateTime.MinValue;
                 string description = string.Empty;
                 string location = string.Empty;
+
+                bool isTimeGMT = false; // Is the time incorrectly being displayed as GMT
 
                 // Split into seperate lines
                 string[] descriptions = descriptionBlob.Split('\n');
@@ -83,6 +89,7 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
                                 .Replace("</div>", string.Empty)
                                 .Replace("<div>", string.Empty)
                                 .Trim();
+
                         DateTime.TryParse(startTimeRaw, out startDate);
                     }
 
@@ -93,6 +100,16 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
                                 .Replace("</div>", string.Empty)
                                 .Replace("<div>", string.Empty)
                                 .Trim();
+
+                        // This is to fix the issue where events marked as "All Day" are presented in GMT, when the rest of the 
+                        // events in the feed are not in GMT. We can detect the time "5:59 PM" and assume that this is an affected event.
+                        // Note that this time is specific to Saskatchewan because we're 6 hours behind GMT - this likely won't work
+                        // anywhere else.
+                        if (endTimeRaw.Contains("5:59 PM"))
+                        {
+                            isTimeGMT = true;
+                        }
+
                         DateTime.TryParse(endTimeRaw, out endDate);
                     }
 
@@ -120,6 +137,13 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
                 }
                 else
                 {
+                    // If the time is in GMT, really is has been adjusted from GMT twice. We need to "undo" one by adding 6 hours.
+                    if (isTimeGMT)
+                    {
+                        startDate = startDate.AddHours(6);
+                        endDate = endDate.AddHours(6);
+                    }
+
                     returnedEvents.Add(new SharepointCalendarEvent()
                     {
                         Title = item.Title.Text,
