@@ -16,6 +16,7 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
 
             // Create some friendly text to use in the dashboard
             string StartDateFriendly = ce.EventStart.DayOfWeek.ToString().Substring(0, 3) + ", " + ce.EventStart.ToString("MMM dd");
+            string EndDateFriendly = ce.EventEnd.DayOfWeek.ToString().Substring(0, 3) + ", " + ce.EventEnd.ToString("MMM dd");
 
             double DaysUntil = ce.EventStart.Subtract(DateTime.Today).TotalDays;
 
@@ -36,6 +37,7 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
             returnMe.Append("\"starttime\" : \"" + ce.EventStart.ToShortTimeString() + "\",");
             returnMe.Append("\"enddate\" : \"" + ce.EventEnd.ToShortDateString() + "\",");
             returnMe.Append("\"endtime\" : \"" + ce.EventEnd.ToShortTimeString() + "\",");
+            returnMe.Append("\"enddatefriendly\" : \"" + EndDateFriendly + "\",");
             returnMe.Append("\"totalhours\" : \"" + ce.Duration.Hours.ToString() + "\",");
             returnMe.Append("\"totaldays\" : \"" + ce.Duration.Days.ToString() + "\",");
             returnMe.Append("\"title\" : \"" + ce.Title + "\",");

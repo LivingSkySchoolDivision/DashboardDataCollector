@@ -193,7 +193,7 @@
     <Content Include="Sharepoint2013\Blog.aspx" />
     <Content Include="Sharepoint2013\Calendar.aspx" />
     <Content Include="Template.Master" />
-    <None Include="Properties\PublishProfiles\DashboardServer.pubxml" />
+    <None Include="Properties\PublishProfiles\Dashboard Server.pubxml" />
     <None Include="web.config.template">
       <SubType>Designer</SubType>
     </None>
