@@ -139,6 +139,13 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
                         endDate = endDate - TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now);
                     }
 
+                    // If the end year is set to 2163, set the end year to the same as the start year.
+                    // I dont know who thought this was a good idea
+                    if (endDate.Year == 2163)
+                    {
+                        endDate = new DateTime(startDate.Year, endDate.Month, endDate.Day, endDate.Hour, endDate.Minute, endDate.Second);
+                    }
+
                     returnedEvents.Add(new SharepointCalendarEvent()
                     {
                         Title = item.Title.Text,

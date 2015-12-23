@@ -69,7 +69,9 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
             {
                 try
                 {
-                    allEvents = Sharepoint2013CalendarParser.ParseRSSFeed(Settings.SharePointUsername, Settings.SharePointPassword, baseURL, guid).Where(ev => ev.EventStart >= DateTime.Today).ToList();
+                    // **************** HERE is where the issue is, with events not showing up if they are multi day events
+                    // *****************************************************************************************************************************************VV
+                    allEvents = Sharepoint2013CalendarParser.ParseRSSFeed(Settings.SharePointUsername, Settings.SharePointPassword, baseURL, guid).Where(ev => ev.EventEnd >= DateTime.Today).ToList();
                 }
                 catch (Exception ex)
                 {
