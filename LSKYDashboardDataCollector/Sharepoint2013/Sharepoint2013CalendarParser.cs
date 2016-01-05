@@ -43,7 +43,7 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
 
             foreach (ListItem item in sharepointListItems)
             {
-                //try
+                try
                 {
                     // We need to deal with "Deleted" events
                     // These are events that cancel out existing events, if the events are recurring
@@ -111,8 +111,6 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
                         }
                     };
                      
-                    //*/
-
                     // Correct start and end dates if the event is recurring
                     if (recurring)
                     {
@@ -122,7 +120,6 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
                     }
                     else
                     {
-                        //throw new Exception("got this far");
                         // Non recurring events can go straight to the list
                         
                         returnMe.Add(new SharepointCalendarEvent()
@@ -139,7 +136,7 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
                         });
                     }
                 } 
-                //catch { }
+                catch { }
             }
 
             return returnMe.OrderBy(e => e.EventStart).ThenBy(e => e.EventEnd).ToList();
