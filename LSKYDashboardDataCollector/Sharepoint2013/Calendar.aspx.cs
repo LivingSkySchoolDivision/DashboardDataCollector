@@ -67,16 +67,17 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
             List<SharepointCalendarEvent> allEvents = new List<SharepointCalendarEvent>();
             if (!string.IsNullOrEmpty(baseURL) && !string.IsNullOrEmpty(guid))
             {
-                try
+                //try
                 {
                     // **************** HERE is where the issue is, with events not showing up if they are multi day events
                     // *****************************************************************************************************************************************VV
-                    allEvents = Sharepoint2013CalendarParser.ParseRSSFeed(Settings.SharePointUsername, Settings.SharePointPassword, baseURL, guid).Where(ev => ev.EventEnd >= DateTime.Today).ToList();
+                    allEvents = Sharepoint2013CalendarParser.GetCalendarByGUID(Settings.SharePointUsername, Settings.SharePointPassword, baseURL, guid).Where(ev => ev.EventEnd >= DateTime.Today).ToList();
                 }
-                catch (Exception ex)
+                /*catch (Exception ex)
                 {
                     Response.Write(ex.Message);
                 }
+                 * */
             }
 
             // Sort into Today and Tomorrow lists

@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Security.AccessControl;
 using System.ServiceModel.Syndication;
 using System.Text;
 using System.Web;
-using System.Web.UI.WebControls;
 using System.Xml;
 using System.Xml.Linq;
 using LSKYDashboardDataCollector.Common;
+using Microsoft.SharePoint.Client;
+using ListItemCollection = System.Web.UI.WebControls.ListItemCollection;
+using TimeZone = System.TimeZone;
 
 namespace LSKYDashboardDataCollector.Sharepoint2013
 {
@@ -26,153 +29,138 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
             return EventSignature(ev.Title, ev.EventStart);
         }
 
-        public static List<SharepointCalendarEvent> ParseRSSFeed(string username, string password, string siteBaseURL, string listGUID)
+        
+        private static List<SharepointCalendarEvent> ParseSharepointList(ClientContext sharepointContext, List sharepointList)
         {
-            // Example url: https://portal.lskysd.ca/officecalendars/_layouts/15/listfeed.aspx?List={D492D463-8204-460C-99A2-81F7646FB65E}
+            List<SharepointCalendarEvent> returnMe = new List<SharepointCalendarEvent>();
+            
+            CamlQuery query = CamlQuery.CreateAllItemsQuery();
+            Microsoft.SharePoint.Client.ListItemCollection sharepointListItems = sharepointList.GetItems(query);
 
-            List<SharepointCalendarEvent> returnedEvents = new List<SharepointCalendarEvent>();
+            sharepointContext.Load(sharepointListItems);
 
-            List<string> deletedEvents = new List<string>();
+            sharepointContext.ExecuteQuery();
 
-
-            // Make a web request to the specified url
-            StreamReader readStream = new StreamReader(SharepointResponseRetriever.GetSharepointResponse(username, password, siteBaseURL, listGUID), Encoding.UTF8);
-
-            XmlReader xmlReader = XmlReader.Create(readStream);
-
-            // Parse RSS items into objects
-            SyndicationFeed feed = SyndicationFeed.Load(xmlReader);
-
-            foreach (SyndicationItem item in feed.Items)
+            foreach (ListItem item in sharepointListItems)
             {
-                // Figure out author
-                string author = string.Empty;
-                foreach (SyndicationPerson person in item.Authors)
+                //try
                 {
-                    author = person.Email; // Sharepoint puts the person's name in the email field
-                }
+                    // We need to deal with "Deleted" events
+                    // These are events that cancel out existing events, if the events are recurring
 
-                // Extract dates and times from the description field
-                //<![CDATA[<div><b>Start Time:</b> 9/3/2015 1:30 PM</div>
-                //<div><b>End Time:</b> 9/3/2015 3:30 PM</div>
-                //<div><b>Description:</b> <div></div></div>
-                //<div><b>Created:</b> 9/3/2015 11:01 AM</div>
-                //<div><b>Created By:</b> Christeena Fisher</div>
-                //<div><b>Modified:</b> 9/3/2015 11:01 AM</div>
-                //<div><b>Modified By:</b> Christeena Fisher</div>
-                //<div><b>Title:</b> Brenda</div>
-                //<div><b>Version:</b> 1.0</div>
-                //]]>
-
-                string descriptionBlob = item.Summary.Text;
-
-                DateTime startDate = DateTime.MinValue;
-                DateTime endDate = DateTime.MinValue;
-                string description = string.Empty;
-                string location = string.Empty;
-
-                bool isTimeGMT = false; // Is the time incorrectly being displayed as GMT
-
-                // Split into seperate lines
-                string[] descriptions = descriptionBlob.Split('\n');
-                foreach (string descLine in descriptions)
-                {
-                    if (descLine.ToLower().Contains("start time:"))
+                    // Deal with recurring events, somehow
+                    
+                    string title = string.Empty;
+                    if (item.FieldValues.ContainsKey("Title"))
                     {
-                        string startTimeRaw =
-                            descLine.Replace("<b>Start Time:</b> ", string.Empty)
-                                .Replace("</div>", string.Empty)
-                                .Replace("<div>", string.Empty)
-                                .Trim();
-
-                        DateTime.TryParse(startTimeRaw, out startDate);
-                    }
-
-                    if (descLine.ToLower().Contains("end time:"))
-                    {
-                        string endTimeRaw =
-                            descLine.Replace("<b>End Time:</b> ", string.Empty)
-                                .Replace("</div>", string.Empty)
-                                .Replace("<div>", string.Empty)
-                                .Trim();
-
-                        // This is to fix the issue where events marked as "All Day" are presented in GMT, when the rest of the 
-                        // events in the feed are not in GMT. We can detect the time ":59 PM" and assume that this is an affected event.
-                        // Chances are, nobody will actually put in an event for a time ending in :59.
-                        // This means that if anyone does legitimately enter an event in with 59 minutes, it will display the wrong time.
-                        if (endTimeRaw.Contains(":59 "))
+                        if (!string.IsNullOrEmpty((string)item["Title"]))
                         {
-                            isTimeGMT = true;
+                            title = item["Title"].ToString();
                         }
+                    };
+                    
+                    string location = string.Empty;
+                    
+                    string description = string.Empty;
+                    if (item.FieldValues.ContainsKey("Description"))
+                    {
+                        if (!string.IsNullOrEmpty((string) item["Description"]))
+                        {
+                            // The description will almost always contain HTML, which we can't include in the JSON file or it won't validate
+                            // For now, we dont need the description
+                            // In the future perhaps we can strip out the HTML tags somehow
 
-                        DateTime.TryParse(endTimeRaw, out endDate);
+                            //description = item["Description"].ToString();
+                        }
                     }
 
-                    if (descLine.ToLower().Contains("description:"))
+                    string author = string.Empty; // Haven't figured out how to get this yet
+
+                    DateTime eventStarts = DateTime.MinValue;
+                    if (item.FieldValues.ContainsKey("EventDate"))
                     {
-                        description =
-                            descLine.Replace("<b>Description:</b> ", string.Empty)
-                                .Replace("</div>", string.Empty)
-                                .Replace("<div>", string.Empty)
-                                .Trim();
+                        eventStarts = Parsers.ParseDate(item["EventDate"].ToString());
                     }
 
-                    if (descLine.ToLower().Contains("location:"))
+                    DateTime eventEnds = DateTime.MinValue;
+                    if (item.FieldValues.ContainsKey("EndDate"))
                     {
-                        location =
-                            descLine.Replace("<b>Location:</b> ", string.Empty)
-                                .Replace("</div>", string.Empty)
-                                .Replace("<div>", string.Empty)
-                                .Trim();
-                    }
-                }
-                if (item.Title.Text.ToLower().StartsWith("deleted:"))
-                {
-                    deletedEvents.Add(EventSignature(item.Title.Text.Replace("Deleted: ", string.Empty), startDate));
-                }
-                else
-                {
-                    // If this time is (incorrectly) UTC instead of the same time zone as other events, we should adjust it manually
-                    if (isTimeGMT)
+                       eventEnds = Parsers.ParseDate(item["EndDate"].ToString());
+                    };
+
+
+                    bool allDay = false;
+                    if (item.FieldValues.ContainsKey("fAllDayEvent"))
                     {
-                        startDate = startDate - TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now);
-                        endDate = endDate - TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now);
+                        allDay = Parsers.ParseBool(item["fAllDayEvent"].ToString());
                     }
 
-                    // If the end year is set to 2163, set the end year to the same as the start year.
-                    // I dont know who thought this was a good idea
-                    if (endDate.Year == 2163)
+                    bool recurring = false;
+                    if (item.FieldValues.ContainsKey("fRecurrence"))
                     {
-                        endDate = new DateTime(startDate.Year, endDate.Month, endDate.Day, endDate.Hour, endDate.Minute, endDate.Second);
+                        recurring = Parsers.ParseBool(item["fRecurrence"].ToString());
                     }
-
-                    returnedEvents.Add(new SharepointCalendarEvent()
+                    
+                    
+                    string recurrenceData = string.Empty;
+                    if (item.FieldValues.ContainsKey("RecurrenceData"))
                     {
-                        Title = item.Title.Text,
-                        Description = description,
-                        Author = author,
-                        EventStart = startDate,
-                        EventEnd = endDate,
-                        Location = location
-                    });
-                }
+                        if (!string.IsNullOrEmpty((string)item["RecurrenceData"]))
+                        {
+                            recurrenceData = item["RecurrenceData"].ToString();
+                        }
+                    };
+                     
+                    //*/
+
+                    // Correct start and end dates if the event is recurring
+                    if (recurring)
+                    {
+                        // Deal with recurring events differently - Their dates will be screwed up, so use the data from them to create "phantom" events that line up with the dates required
+
+                        
+                    }
+                    else
+                    {
+                        //throw new Exception("got this far");
+                        // Non recurring events can go straight to the list
+                        
+                        returnMe.Add(new SharepointCalendarEvent()
+                        {
+                            Title = title,
+                            Location = location,
+                            Description = description,
+                            Author = author,
+                            AllDay = allDay,
+                            Recurring = recurring,
+                            EventStart = eventStarts,
+                            EventEnd = eventEnds,
+                            RecurrenceInfo = recurrenceData
+                        });
+                    }
+                } 
+                //catch { }
             }
 
-            // Go through the events to see if there are any that should be removed because they were deleted
-            foreach (SharepointCalendarEvent ev in returnedEvents)
-            {
-                foreach (string deletedEventSignature in deletedEvents)
-                {
-                    if (EventSignature(ev).Equals(deletedEventSignature))
-                    {
-                        ev.Deleted = true;
-                    }
-                }
-            }
+            return returnMe.OrderBy(e => e.EventStart).ThenBy(e => e.EventEnd).ToList();
+        }
 
-            // Return parsed calendar events
-            return returnedEvents.Where(ev => ev.Deleted == false).OrderBy(ev => ev.EventStart).ToList();
+        public static List<SharepointCalendarEvent> GetCalendarByName(string username, string password, string siteBaseURL, string listName)
+        {
+            ClientContext sharepointClientContext = new ClientContext(siteBaseURL);
+            sharepointClientContext.Credentials = new NetworkCredential(username, password);
+            List sharepointList = sharepointClientContext.Web.Lists.GetByTitle(listName);
 
+            return ParseSharepointList(sharepointClientContext, sharepointList);
+        }
+
+        public static List<SharepointCalendarEvent> GetCalendarByGUID(string username, string password, string siteBaseURL, string listGUID)
+        {
+            ClientContext sharepointClientContext = new ClientContext(siteBaseURL);
+            sharepointClientContext.Credentials = new NetworkCredential(username, password);
+            List sharepointList = sharepointClientContext.Web.Lists.GetById(new Guid(listGUID));
+
+            return ParseSharepointList(sharepointClientContext, sharepointList);
         }
     }
 }

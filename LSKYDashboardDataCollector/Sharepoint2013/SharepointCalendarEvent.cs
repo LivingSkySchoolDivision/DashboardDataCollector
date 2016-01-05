@@ -27,6 +27,7 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
 
         public string Author { get; set; }
 
+        public string RecurrenceInfo { get; set; }
         public SharepointCalendarEvent() { }
 
         public override string ToString()

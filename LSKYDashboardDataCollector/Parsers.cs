@@ -124,5 +124,10 @@ namespace LSKYDashboardDataCollector
             char parsedChar = '\0';
             return char.TryParse(thisString, out parsedChar) ? parsedChar : '\0';
         }
+
+        public static string StripInvalidJSONCharacters(string thisString)
+        {
+            return thisString.Replace("<", "&nbsp;");
+        }
     }
 }
