@@ -34,6 +34,29 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
         {
             return "SharepointCalendarEvent { Starts: " + EventStart.ToShortDateString() + " " + EventStart.ToShortTimeString() + ", Ends: " + EventEnd.ToShortDateString() + " " + EventEnd.ToShortTimeString() + ", All Day: " + AllDay + ", Title: " + Title + ", Location: " + Location + " }";
         }
+
+        public SharepointCalendarEvent Clone()
+        {
+            return this.CloneWithNewDates(this.EventStart, this.EventEnd);
+        }
+
+        public SharepointCalendarEvent CloneWithNewDates(DateTime startDate, DateTime endDate)
+        {
+            return new SharepointCalendarEvent()
+            {
+                EventStart = new DateTime(startDate.Year, startDate.Month, startDate.Day, this.EventStart.Hour, this.EventStart.Minute, this.EventStart.Second),
+                EventEnd = new DateTime(endDate.Year, endDate.Month, endDate.Day, this.EventEnd.Hour, this.EventEnd.Minute, this.EventEnd.Second),
+                AllDay = this.AllDay,
+                Author = this.Author,
+                Deleted = this.Deleted,
+                Description = this.Description,
+                Location = this.Location,
+                RecurrenceInfo = this.RecurrenceInfo,
+                Recurring = this.Recurring,
+                Title = this.Title
+                
+            };
+        }
         
        
     }
