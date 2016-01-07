@@ -148,6 +148,7 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
                         // Events that start with "Deleted" cancel out recurring events
                         if (item["Title"].ToString().StartsWith("Deleted:"))
                         {
+                            newCalendarEvent.Title = newCalendarEvent.Title.Remove(0, 8).Trim();
                             deletedRecurringEvents.Add(newCalendarEvent);
                         }
                         else
@@ -165,6 +166,7 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
 
             
             // Deal with recurring events
+            #region Deal with recurring events
             foreach (SharepointCalendarEvent ev in recurringEvents_Unexpanded)
             {
                 
@@ -568,23 +570,42 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
                             // Yearly
                             if (segment.StartsWith("<yearly"))
                             {
-
+                                // Don't support yearly events at the moment - I don't have the patience to deal with this right now, and theres little chance a yearly event will be in our calendars
                             }
 
                         }
                     }
 
                 }
-                else
+            }
+#endregion
+
+            // Deal with deleted events 
+            List<SharepointCalendarEvent> finalReturnedEventsList = new List<SharepointCalendarEvent>();
+            foreach (SharepointCalendarEvent ev in returnMe)
+            {
+                bool foundDeletedEvent = false;
+                foreach (SharepointCalendarEvent deletedEvent in deletedRecurringEvents)
                 {
-                    // These events might all be deleted events that just need to be cancelled out
-                    // Parse english instead of XML
+                    if ((
+                        (ev.Title == deletedEvent.Title) &&
+                        (ev.EventStart.Year == deletedEvent.EventStart.Year) &&
+                        (ev.EventStart.Month == deletedEvent.EventStart.Month) &&
+                        (ev.EventStart.Day == deletedEvent.EventStart.Day)
+                        ))
+                    {
+                        foundDeletedEvent = true;
+                    }
                 }
 
-
+                if (!foundDeletedEvent)
+                {
+                    finalReturnedEventsList.Add(ev);
+                }
             }
 
-            return returnMe.OrderBy(e => e.EventStart).ThenBy(e => e.EventEnd).ToList();
+
+            return finalReturnedEventsList.OrderBy(e => e.EventStart).ThenBy(e => e.EventEnd).ToList();
         }
 
         public static List<SharepointCalendarEvent> GetCalendarByName(string username, string password, string siteBaseURL, string listName)
