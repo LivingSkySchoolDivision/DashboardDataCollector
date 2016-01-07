@@ -78,7 +78,6 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
                             // In the future perhaps we can strip out the HTML tags somehow
 
                             description = Helpers.SanitizeForJSON(item["Description"].ToString());
-                            //description = Helpers.SanitizeForJSON("<p>test</p>");
                         }
                     }
                     
@@ -206,14 +205,6 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
                     // Regex: <repeat>(.+?)<\/repeat>
                     Regex regex = new Regex(@"<repeat>(.+?)<\/repeat>");
                     MatchCollection matches = regex.Matches(ev.RecurrenceInfo);
-
-                    // su="TRUE"
-                    // mo="TRUE"
-                    // tu="TRUE"
-                    // we="TRUE"
-                    // th="TRUE"
-                    // fr="TRUE"
-                    // sa="TRUE"
 
                     foreach (Match match in matches)
                     {
@@ -579,7 +570,7 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
 
                 }
             }
-#endregion
+            #endregion
 
             // Deal with deleted events 
             List<SharepointCalendarEvent> finalReturnedEventsList = new List<SharepointCalendarEvent>();
