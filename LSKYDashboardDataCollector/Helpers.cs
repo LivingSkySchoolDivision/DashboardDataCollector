@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web;
+using System.Web.UI.WebControls;
 
 namespace LSKYDashboardDataCollector
 {
@@ -86,5 +88,102 @@ namespace LSKYDashboardDataCollector
 
             return returnMe;
         }
+
+
+        public static IEnumerable<DayOfWeek> GetWeekdays()
+        {
+            return new List<DayOfWeek>()
+            {
+                DayOfWeek.Monday,
+                DayOfWeek.Tuesday,
+                DayOfWeek.Wednesday,
+                DayOfWeek.Thursday,
+                DayOfWeek.Friday
+            };
+        }
+
+        public static IEnumerable<DayOfWeek>  GetWeekendDays()
+        {
+            return new List<DayOfWeek>()
+            {
+                DayOfWeek.Saturday,
+                DayOfWeek.Sunday
+            };
+        }
+
+        public static IEnumerable<DateTime> GetDaysOfMonth(int year, int month)
+        {
+            List<DateTime> returnMe = new List<DateTime>();
+            for (int dayNum = 1; dayNum <= DateTime.DaysInMonth(year, month); dayNum++)
+            {
+                returnMe.Add(new DateTime(year, month, dayNum));
+            }
+            return returnMe;
+        }
+
+      
+        public static DateTime GetDayOfMonth_Backwards(int year, int month, int iteration, DayOfWeek dayOfWeek)
+        {
+            return GetDayOfMonth_Backwards(year, month, iteration, new List<DayOfWeek>() { dayOfWeek });
+        }
+
+        public static DateTime GetDayOfMonth(int year, int month, int iteration, DayOfWeek dayOfWeek)
+        {
+            return GetDayOfMonth(year, month, iteration, new List<DayOfWeek>() { dayOfWeek });
+        }
+
+        public static DateTime GetDayOfMonth_Backwards(int year, int month, int iteration, IEnumerable<DayOfWeek> daysOfWeek)
+        {
+            if (iteration == 999)
+            {
+                //return GetLastDayOfMonth(year, month, dayOfWeek);
+            }
+
+            DateTime returnMe = new DateTime(year, month, 1);
+            int foundIteration = 0;
+
+            foreach (DateTime day in GetDaysOfMonth(year, month).Reverse())
+            {
+                if (daysOfWeek.Contains(day.DayOfWeek))
+                {
+                    foundIteration++;
+                    if (foundIteration == iteration)
+                    {
+                        returnMe = day;
+                        break;
+                    }
+                }
+            }
+
+            return returnMe;
+        }
+
+        public static DateTime GetDayOfMonth(int year, int month, int iteration, IEnumerable<DayOfWeek> daysOfWeek)
+        {
+            if (iteration == 999)
+            {
+                return GetDayOfMonth_Backwards(year, month, iteration, daysOfWeek);
+            }
+
+            DateTime returnMe = new DateTime(year, month, 1);
+            int foundIteration = 0;
+
+            foreach (DateTime day in GetDaysOfMonth(year, month))
+            {
+                if (daysOfWeek.Contains(day.DayOfWeek))
+                {
+                    foundIteration++;
+                    if (foundIteration == iteration)
+                    {
+                        returnMe = day;
+                        break;
+                    }
+                }
+            }
+
+            return returnMe;
+        }
+       
+        
     }
 }

@@ -31,7 +31,9 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
             return EventSignature(ev.Title, ev.EventStart);
         }
 
-        
+
+
+
         private static List<SharepointCalendarEvent> ParseSharepointList(ClientContext sharepointContext, List sharepointList)
         {
             List<SharepointCalendarEvent> returnMe = new List<SharepointCalendarEvent>();
@@ -217,11 +219,48 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
                             // Strip the <repeat> and </repeat> from the start and end of the segment
                             string segment = match.Value.Substring(8, match.Value.Length - (8 + 9));
 
+
                             // Daily
                             if (segment.StartsWith("<daily"))
                             {
                                 // parse the "dayFrequency", then just multiply
+
+                                int dayFrequency = 1;
+
+                                Regex dayFrequencyRegex = new Regex(@"dayFrequency=\""(\d+)\""");
+                                Match dayFrequencyMatch = dayFrequencyRegex.Match(segment);
+                                if (dayFrequencyMatch.Success)
+                                {
+                                    dayFrequency = Parsers.ParseInt(dayFrequencyMatch.Value.Substring(14, dayFrequencyMatch.Value.Length - (14 + 1)));
+                                    if (dayFrequency < 1)
+                                    {
+                                        dayFrequency = 1;
+                                    }
+                                }
+
+                                // Get the original start date, and accellerate it to a date closer to now
+                                DateTime startDate = ev.EventStart;
+                                if (startDate <= DateTime.Now)
+                                {
+                                    while (startDate <= DateTime.Now.AddDays(-7))
+                                    {
+                                        startDate = startDate.AddDays(dayFrequency);
+                                    }
+                                }
+
+
+                                // Get the current week (Sunday), then subtract 1 week
+                                //DateTime startOfWeek = DateTime.Today.AddDays(-1 * (int)(DateTime.Today.DayOfWeek)).AddDays(-7);
+
+                                for (int dayCounter = 0; dayCounter <= 30; dayCounter+=dayFrequency)
+                                {
+                                    DateTime newEventStartDate = startDate.AddDays(dayCounter);
+                                    //DateTime newEventEndDate = newEventStartDate.Add(ev.Duration);
+                                    returnMe.Add(ev.CloneWithNewDates(newEventStartDate, newEventStartDate));
+                                }
+                                
                             }
+
 
                             // Weekly
                             if (segment.StartsWith("<weekly"))
@@ -231,19 +270,29 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
                                 // We need to factor in the weekFrequency="1", to handle events that might be every second week or something
                                 int weekFrequency = 1;
                                 
-                                Regex weekFrequencyRegex = new Regex(@"monthFrequency=\""(\d+)\""");
+                                Regex weekFrequencyRegex = new Regex(@"weekFrequency=\""(\d+)\""");
                                 Match weeklyFrequencyMatch = weekFrequencyRegex.Match(segment);
                                 if (weeklyFrequencyMatch.Success)
                                 {
-                                    weekFrequency = Parsers.ParseInt(weeklyFrequencyMatch.Value.Substring(16, weeklyFrequencyMatch.Value.Length - 17));
+                                    weekFrequency = Parsers.ParseInt(weeklyFrequencyMatch.Value.Substring(15, weeklyFrequencyMatch.Value.Length - (15 + 1)));
                                     if (weekFrequency < 1)
                                     {
                                         weekFrequency = 1;
                                     }
                                 }
                                 
+                                // Get the original start date, and accellerate it to a date closer to now
+                                DateTime startDate = ev.EventStart;
+                                if (startDate <= DateTime.Now)
+                                {
+                                    while (startDate <= DateTime.Now.AddDays(-28))
+                                    {
+                                        startDate = startDate.AddDays(weekFrequency * 7);
+                                    }
+                                }
+
                                 // Get the current week (Sunday), then subtract 4 weeks from it for a start date
-                                DateTime startOfWeek = DateTime.Today.AddDays(-1 * (int)(DateTime.Today.DayOfWeek)).AddDays(-28);
+                                //DateTime startOfWeek = DateTime.Today.AddDays(-1 * (int)(DateTime.Today.DayOfWeek)).AddDays(-28);
 
                                 // Translate detected days into day numbers (Sunday = 0)
                                 List<int> eventDayNumbers = new List<int>();
@@ -283,25 +332,238 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
                                     eventDayNumbers.Add(6);
                                 }
 
+                                // Get the sunday of the week of the start date of the event
+                                DateTime startingWeekSunday = startDate.AddDays(-1 * (int)startDate.DayOfWeek);
 
                                 for (int weekCounter = 0; weekCounter < 12; weekCounter += weekFrequency)
                                 {
                                     foreach (int dayNum in eventDayNumbers)
                                     {
-                                        DateTime newEventStartDate = startOfWeek.AddDays(dayNum).AddDays(7*weekCounter);
-                                        //DateTime newEventEndDate = newEventStartDate.Add(ev.Duration);
+                                        DateTime newEventStartDate = startingWeekSunday.AddDays(dayNum).AddDays(7 * weekCounter);
                                         returnMe.Add(ev.CloneWithNewDates(newEventStartDate, newEventStartDate));
                                     }
                                 }
-
-
                             }
 
-                            // Monthly
-                            if (segment.StartsWith("<monthlyByDay"))
+
+                            // Monthly, given day numbers (Every 2nd of the month, for example)
+                            if (segment.StartsWith("<monthly "))
                             {
+                                // If the user sets it to every ___ day of every __ month, it looks like this:
+                                //  <monthly monthFrequency="2" day="6" />
 
+                                int monthFrequency = 1;
+                                Regex monthFrequencyRegex = new Regex(@"monthFrequency=\""(\d+)\""");
+                                Match monthFrequencyMatch = monthFrequencyRegex.Match(segment);
+                                if (monthFrequencyMatch.Success)
+                                {
+                                    monthFrequency = Parsers.ParseInt(monthFrequencyMatch.Value.Substring(16, monthFrequencyMatch.Value.Length - 17));
+                                    if (monthFrequency < 1)
+                                    {
+                                        monthFrequency = 1;
+                                    }
+                                }
+
+                                // We ignore the actual day of the start date, in favor of this value (this is what Sharepoint does anyway)
+                                int dayNumber = 0;
+                                Regex dayNumberRegex = new Regex(@"day=\""(\d+)\""");
+                                Match dayNumberMatch = dayNumberRegex.Match(segment);
+                                if (dayNumberMatch.Success)
+                                {
+                                    dayNumber = Parsers.ParseInt(dayNumberMatch.Value.Substring(5, dayNumberMatch.Value.Length - (5 + 1)));
+                                    if (dayNumber < 1)
+                                    {
+                                        dayNumber = 1;
+                                    }
+                                }
+
+                                // Rebuild the event start date based on the recurrence information
+                                ev.EventStart = new DateTime(ev.EventStart.Year, ev.EventStart.Month, dayNumber, ev.EventStart.Hour, ev.EventStart.Minute, ev.EventStart.Second);
+
+                                // Find the original month and acellerate to a time closer to now, so we don't incorrectly assume that this month includes the event (if the month frequency causes it to skip the current month)
+                                DateTime startDate = ev.EventStart;
+                                if (startDate <= DateTime.Now)
+                                {
+                                    while (startDate <= DateTime.Now.AddDays(-1 * (31 * (monthFrequency + 1))))
+                                    {
+                                        startDate = startDate.AddMonths(monthFrequency);
+                                    }
+                                }
+
+                                for (int monthCounter = 0; monthCounter < 12; monthCounter += monthFrequency)
+                                {
+                                    DateTime newEventStartDate = startDate.AddMonths(monthFrequency * monthCounter);
+                                    returnMe.Add(ev.CloneWithNewDates(newEventStartDate, newEventStartDate));
+                                }
                             }
+
+
+                            // Monthly by Day (Every third wednesday, for example)
+                            if (segment.StartsWith("<monthlyByDay "))
+                            {
+                                // weekdayOfMonth="first"
+                                // First|Second|Third|Fourth|Last 
+                                // Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Weekday|Weekend Day, etc
+
+
+                                // Sharepoint only lets monthly events happen on a single day per event so we dont need to deal with multiple days
+
+                                int monthFrequency = 1;
+                                Regex monthFrequencyRegex = new Regex(@"monthFrequency=\""(\d+)\""");
+                                Match monthFrequencyMatch = monthFrequencyRegex.Match(segment);
+                                if (monthFrequencyMatch.Success)
+                                {
+                                    monthFrequency = Parsers.ParseInt(monthFrequencyMatch.Value.Substring(16, monthFrequencyMatch.Value.Length - 17));
+                                    if (monthFrequency < 1)
+                                    {
+                                        monthFrequency = 1;
+                                    }
+                                }
+
+                                // Get the weekday of month string
+                                string weekdayOfMonthString = string.Empty;
+                                Regex weekdayOfMonthRegex = new Regex(@"weekdayOfMonth=\""(.+?)\""");
+                                Match weekdayOfMonthMatch = weekdayOfMonthRegex.Match(segment);
+                                if (weekdayOfMonthMatch.Success)
+                                {
+                                    weekdayOfMonthString = weekdayOfMonthMatch.Value.Substring(16,weekdayOfMonthMatch.Value.Length-17);
+                                }
+
+
+                                // Make a list of years and months that we care about, because the contextual days will differ year to year
+
+
+                                // If we're missing the weekday of the month string, we can't continue
+                                if (!string.IsNullOrEmpty(weekdayOfMonthString))
+                                {
+                                    int goalIteration = 0;
+                                    switch (weekdayOfMonthString.ToLower())
+                                    {
+                                        case "first":
+                                            goalIteration = 1;
+                                            break;
+                                        case "second":
+                                            goalIteration = 2;
+                                            break;
+                                        case "third":
+                                            goalIteration = 3;
+                                            break;
+                                        case "fourth":
+                                            goalIteration = 4;
+                                            break;
+                                        case "last":
+                                            goalIteration = 999;
+                                            break;
+                                    }
+
+                                    DayOfWeek goalDayOfWeek = DayOfWeek.Saturday;
+                                   
+                                    if (segment.Contains("su=\"TRUE\""))
+                                    {
+                                        goalDayOfWeek = DayOfWeek.Sunday;
+                                    }
+
+                                    if (segment.Contains("mo=\"TRUE\""))
+                                    {
+                                        goalDayOfWeek = DayOfWeek.Monday;
+                                    }
+
+                                    if (segment.Contains("tu=\"TRUE\""))
+                                    {
+                                        goalDayOfWeek = DayOfWeek.Tuesday;
+                                    }
+
+                                    if (segment.Contains("we=\"TRUE\""))
+                                    {
+                                        goalDayOfWeek = DayOfWeek.Wednesday;
+                                    }
+
+                                    if (segment.Contains("th=\"TRUE\""))
+                                    {
+                                        goalDayOfWeek = DayOfWeek.Thursday;
+                                    }
+
+                                    if (segment.Contains("fr=\"TRUE\""))
+                                    {
+                                        goalDayOfWeek = DayOfWeek.Friday;
+                                    }
+
+                                    if (segment.Contains("sa=\"TRUE\""))
+                                    {
+                                        goalDayOfWeek = DayOfWeek.Saturday;
+                                    }
+
+                                    // Get the original start date, and accellerate it to a date closer to now
+                                    DateTime startDate = ev.EventStart;
+                                    if (startDate <= DateTime.Now)
+                                    {
+                                        while (startDate <= DateTime.Now.AddDays(-1 * monthFrequency * 31))
+                                        {
+                                            startDate = startDate.AddMonths(monthFrequency);
+                                        }
+                                    }
+                                    
+                                    // Make a list of months, in the form of datetimes of the first of those months, for each phantom event we want to create
+                                    // We'll need to go through all the below BS for eachof them seperately, because they will differ year to year
+
+                                    List<DateTime> phantomEventMonths = new List<DateTime>();
+                                    for (int monthCount = 0; monthCount <= 12; monthCount+=monthFrequency)
+                                    {
+                                        phantomEventMonths.Add(new DateTime(startDate.Year, startDate.Month, 1).AddMonths(monthCount));
+                                    }
+
+                                    foreach (DateTime phantomEventMonth in phantomEventMonths)
+                                    {
+                                        DateTime newEventStartDate = phantomEventMonth;
+
+                                        if (goalIteration == 999)
+                                        {
+                                            // We're finding the last day of the month instead of the first day
+                                            if (segment.ToLower().Contains("weekend_day=\"true\""))
+                                            {
+                                                newEventStartDate = Helpers.GetDayOfMonth_Backwards(phantomEventMonth.Year, phantomEventMonth.Month, 1, Helpers.GetWeekendDays());
+                                            }
+                                            else if (segment.ToLower().Contains("weekday=\"true\""))
+                                            {
+                                                newEventStartDate = Helpers.GetDayOfMonth_Backwards(phantomEventMonth.Year, phantomEventMonth.Month, 1, Helpers.GetWeekdays());
+                                            }
+                                            else if (segment.ToLower().Contains("day=\"true\""))
+                                            {
+                                                // Just the last day of the month
+                                                newEventStartDate = new DateTime(phantomEventMonth.Year, phantomEventMonth.Month, DateTime.DaysInMonth(phantomEventMonth.Year, phantomEventMonth.Month));
+                                            }
+                                            else
+                                            {
+                                                // Find the day specifically
+                                                newEventStartDate = Helpers.GetDayOfMonth_Backwards(phantomEventMonth.Year, phantomEventMonth.Month, 1, goalDayOfWeek);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (segment.ToLower().Contains("weekend_day=\"true\""))
+                                            {
+                                                newEventStartDate = Helpers.GetDayOfMonth(phantomEventMonth.Year, phantomEventMonth.Month, goalIteration, Helpers.GetWeekendDays());
+                                            }
+                                            else if (segment.ToLower().Contains("weekday=\"true\""))
+                                            {
+                                                newEventStartDate = Helpers.GetDayOfMonth(phantomEventMonth.Year, phantomEventMonth.Month, goalIteration, Helpers.GetWeekdays());
+                                            }
+                                            else if (segment.ToLower().Contains("day=\"true\""))
+                                            {
+                                                newEventStartDate = new DateTime(phantomEventMonth.Year, phantomEventMonth.Month, goalIteration);
+                                            }
+                                            else
+                                            {
+                                                // Find the day specifically
+                                                newEventStartDate = Helpers.GetDayOfMonth(phantomEventMonth.Year, phantomEventMonth.Month, goalIteration, goalDayOfWeek);
+                                            }
+                                        }
+                                        
+                                        returnMe.Add(ev.CloneWithNewDates(newEventStartDate, newEventStartDate));
+                                    }
+                                }
+                            }
+
 
                             // Yearly
                             if (segment.StartsWith("<yearly"))
