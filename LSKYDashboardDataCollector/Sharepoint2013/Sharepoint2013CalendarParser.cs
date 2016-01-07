@@ -77,7 +77,8 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
                             // For now, we dont need the description
                             // In the future perhaps we can strip out the HTML tags somehow
 
-                            //description = item["Description"].ToString();
+                            description = Helpers.SanitizeForJSON(item["Description"].ToString());
+                            //description = Helpers.SanitizeForJSON("<p>test</p>");
                         }
                     }
                     
