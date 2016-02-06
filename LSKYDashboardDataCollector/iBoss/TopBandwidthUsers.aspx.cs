@@ -52,9 +52,9 @@ namespace LSKYDashboardDataCollector.iBoss
         protected void Page_Load(object sender, EventArgs e)
         {
             // Get username and password from configuration
-            string iBossURL = DDCConfiguration.GetiBossURL();
-            string iBossUsername = DDCConfiguration.GetiBossUsername();
-            string iBossPassword = DDCConfiguration.GetiBossPassword();
+            string iBossURL = Settings.GetiBossURL();
+            string iBossUsername = Settings.GetiBossUsername();
+            string iBossPassword = Settings.GetiBossPassword();
 
             Response.Clear();
             Response.ContentEncoding = Encoding.UTF8;

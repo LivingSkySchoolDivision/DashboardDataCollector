@@ -82,7 +82,6 @@
     </Compile>
     <Compile Include="Common\CommonFunctions.cs" />
     <Compile Include="Common\CommonJSONParts.cs" />
-    <Compile Include="Common\DDCConfiguration.cs" />
     <Compile Include="Common\Extensions.cs" />
     <Compile Include="General\JSONClientInfo.aspx.cs">
       <DependentUpon>JSONClientInfo.aspx</DependentUpon>

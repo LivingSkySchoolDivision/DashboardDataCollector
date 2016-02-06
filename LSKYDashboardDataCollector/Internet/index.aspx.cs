@@ -54,9 +54,6 @@ namespace LSKYDashboardDataCollector.CommunityNet
                 {
                     return false;
                 }
-                
-                // Regardless of the status code returned, if we got a code back, the Internet is probably accessible
-                return true;
             }
             catch (WebException ex)
             {

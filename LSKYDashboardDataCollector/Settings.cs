@@ -37,5 +37,25 @@ namespace LSKYDashboardDataCollector
                 return System.Configuration.ConfigurationManager.AppSettings["sharepoint_password"].ToString();
             }
         }
+
+        public static string GetiBossURL()
+        {
+            return System.Configuration.ConfigurationManager.AppSettings["iboss_url"].ToString();
+        }
+
+        public static string GetiBossUsername()
+        {
+            return System.Configuration.ConfigurationManager.AppSettings["iboss_username"].ToString();
+        }
+
+        public static string GetiBossPassword()
+        {
+            return System.Configuration.ConfigurationManager.AppSettings["iboss_password"].ToString();
+        }
+
+        public static string GetCiscoWirelessLogPath()
+        {
+            return System.Configuration.ConfigurationManager.AppSettings["cisco_wireless_path"].ToString();
+        }
     }
 }

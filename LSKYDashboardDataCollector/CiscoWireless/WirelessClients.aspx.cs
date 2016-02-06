@@ -38,9 +38,9 @@ namespace LSKYDashboardDataCollector.CiscoWireless
             }
             else
             {
-                string FilePath = DDCConfiguration.GetCiscoWirelessLogPath();
+                string FilePath = Settings.GetCiscoWirelessLogPath();
 
-                using (new NetworkConnection(DDCConfiguration.GetCiscoWirelessLogPath(), new System.Net.NetworkCredential(Settings.SharePointUsername, Settings.SharePointPassword)))
+                using (new NetworkConnection(Settings.GetCiscoWirelessLogPath(), new System.Net.NetworkCredential(Settings.SharePointUsername, Settings.SharePointPassword)))
                 {
                     // Get the newest file from the share
                     var directory = new DirectoryInfo(FilePath);
