@@ -13,6 +13,7 @@ Obj/
 *.user
 *.sln.docstates
 *.suo
+.vs/
 
 # Build results
 [Dd]ebug/

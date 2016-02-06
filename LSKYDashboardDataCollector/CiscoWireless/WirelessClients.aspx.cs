@@ -40,55 +40,59 @@ namespace LSKYDashboardDataCollector.CiscoWireless
             {
                 string FilePath = DDCConfiguration.GetCiscoWirelessLogPath();
 
-                // Get the newest file from the share
-                var directory = new DirectoryInfo(FilePath);
-                var myFile = (from f in directory.GetFiles()
-                              orderby f.LastWriteTime descending
-                              select f).First();
-
-                // Parse the file
-                StreamReader reader = File.OpenText(FilePath + @"\" + myFile);
-                string line;
-                int lineNum = 0;
-                
-                string lastCheckedString = string.Empty;
-
-                string dateFormat = "MM/dd/yyyy HH:mm:ss \"GMT-06:00\"";
-
-                while ((line = reader.ReadLine()) != null)
+                using (new NetworkConnection(DDCConfiguration.GetCiscoWirelessLogPath(), new System.Net.NetworkCredential(Settings.SharePointUsername, Settings.SharePointPassword)))
                 {
-                    lineNum++;
+                    // Get the newest file from the share
+                    var directory = new DirectoryInfo(FilePath);
+                    var myFile = (from f in directory.GetFiles()
+                                  orderby f.LastWriteTime descending
+                                  select f).First();
 
-                    /* First two lines of this file are garbage */
-                    if (!(lineNum <= 2))
+                    // Parse the file
+                    StreamReader reader = File.OpenText(FilePath + @"\" + myFile);
+                    string line;
+                    int lineNum = 0;
+
+                    string lastCheckedString = string.Empty;
+
+                    string dateFormat = "MM/dd/yyyy HH:mm:ss \"GMT-06:00\"";
+
+                    while ((line = reader.ReadLine()) != null)
                     {
-                        string[] lineItems = line.Split(',');
+                        lineNum++;
 
-                        if (lineItems.Length == 4)
+                        /* First two lines of this file are garbage */
+                        if (!(lineNum <= 2))
                         {
-                            lastCheckedString = lineItems[1];
+                            string[] lineItems = line.Split(',');
 
-                            DateTime parsedDate = DateTime.MinValue;
-
-                            try
+                            if (lineItems.Length == 4)
                             {
-                                parsedDate = DateTime.ParseExact(lastCheckedString, dateFormat, null);
-                            }
-                            catch { }
+                                lastCheckedString = lineItems[1];
 
-                            if (parsedDate > lastChecked)
-                            {
-                                lastChecked = parsedDate;
-                                associatedClients = int.Parse(lineItems[2]);
-                                authenticatedClients = int.Parse(lineItems[3]);
+                                DateTime parsedDate = DateTime.MinValue;
 
-                                // Refresh the cache
-                                LastUpdated = DateTime.Now;
-                                LastAssociated = associatedClients;
-                                LastAuthenticated = authenticatedClients;
+                                try
+                                {
+                                    parsedDate = DateTime.ParseExact(lastCheckedString, dateFormat, null);
+                                }
+                                catch { }
+
+                                if (parsedDate > lastChecked)
+                                {
+                                    lastChecked = parsedDate;
+                                    associatedClients = int.Parse(lineItems[2]);
+                                    authenticatedClients = int.Parse(lineItems[3]);
+
+                                    // Refresh the cache
+                                    LastUpdated = DateTime.Now;
+                                    LastAssociated = associatedClients;
+                                    LastAuthenticated = authenticatedClients;
+                                }
                             }
                         }
                     }
+
                 }
 
             }

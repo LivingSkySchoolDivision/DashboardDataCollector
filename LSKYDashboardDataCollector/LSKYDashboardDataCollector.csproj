@@ -19,6 +19,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -71,6 +72,7 @@
     <Content Include="iBoss\TopBandwidthUsers.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CiscoWireless\NetworkConnection.cs" />
     <Compile Include="CiscoWireless\WirelessClients.aspx.cs">
       <DependentUpon>WirelessClients.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -139,7 +141,6 @@
     </Compile>
     <Compile Include="Jira\TicketsByFacility.aspx.cs">
       <DependentUpon>TicketsByFacility.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Jira\TicketsByFacility.aspx.designer.cs">
       <DependentUpon>TicketsByFacility.aspx</DependentUpon>
