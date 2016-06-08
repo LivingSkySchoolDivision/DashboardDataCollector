@@ -38,6 +38,13 @@ namespace LSKYDashboardDataCollector
             }
         }
 
+        public static string ADVPNAccountGroup
+        {
+            
+        }
+
+        public static string 
+
         public static string GetiBossURL()
         {
             return System.Configuration.ConfigurationManager.AppSettings["iboss_url"].ToString();

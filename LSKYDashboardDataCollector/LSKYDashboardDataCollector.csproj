@@ -140,6 +140,7 @@
     </Compile>
     <Compile Include="Jira\TicketsByFacility.aspx.cs">
       <DependentUpon>TicketsByFacility.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Jira\TicketsByFacility.aspx.designer.cs">
       <DependentUpon>TicketsByFacility.aspx</DependentUpon>
@@ -210,7 +211,9 @@
       <DependentUpon>web.config.template</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ActiveDirectory\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
