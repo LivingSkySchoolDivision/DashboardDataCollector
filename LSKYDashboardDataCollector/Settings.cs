@@ -40,11 +40,19 @@ namespace LSKYDashboardDataCollector
 
         public static string ADVPNAccountGroup
         {
-            
+            get { return System.Configuration.ConfigurationManager.AppSettings["vpn_ad_group"].ToString(); }
         }
 
-        public static string 
+        public static string ADUsername
+        {
+            get { return System.Configuration.ConfigurationManager.AppSettings["ad_username"].ToString(); }
+        }
 
+        public static string ADPassword
+        {
+            get { return System.Configuration.ConfigurationManager.AppSettings["ad_password"].ToString(); }
+        }
+        
         public static string GetiBossURL()
         {
             return System.Configuration.ConfigurationManager.AppSettings["iboss_url"].ToString();

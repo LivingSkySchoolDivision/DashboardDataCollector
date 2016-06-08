@@ -36,6 +36,7 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
 
         private static List<SharepointBlogPost> ParseSharepointList(ClientContext sharepointContext, List sharepointList)
         {
+            /*
             List<SharepointBlogPost> returnMe = new List<SharepointBlogPost>();
 
             List<SharepointCalendarEvent> deletedRecurringEvents = new List<SharepointCalendarEvent>();
@@ -100,8 +101,8 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
                     // Times returned are all in UTC - adjust to local time
                     if (isTimeGMT)
                     {
-                        eventStarts = eventStarts + TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now);
-                        eventEnds = eventEnds + TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now);
+                        eventStarts = eventStarts + System.TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now);
+                        eventEnds = eventEnds + System.TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now);
                     }
 
                     bool allDay = false;
@@ -598,6 +599,10 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
 
 
             return finalReturnedEventsList.OrderBy(e => e.EventStart).ThenBy(e => e.EventEnd).ToList();
+             * 
+             * */
+
+            return new List<SharepointBlogPost>();
         } 
 
         public List<SharepointBlogPost> ParseRSSFeed(string username, string password, string blogXMLURL)
