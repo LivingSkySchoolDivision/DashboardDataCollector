@@ -84,8 +84,8 @@ namespace LSKYDashboardDataCollector.ActiveDirectory
 
                         return new ADUser()
                         {
-                            FirstName = (string)user.Properties["givenName"].Value,
-                            LastName = (string)user.Properties["sn"].Value,
+                            GivenName = (string)user.Properties["givenName"].Value,
+                            SN = (string)user.Properties["sn"].Value,
                             sAMAccountName = (string)user.Properties["sAMAccountName"].Value,
                             comment = (string)user.Properties["comment"].Value,
                             description = (string)user.Properties["description"].Value,
@@ -110,6 +110,54 @@ namespace LSKYDashboardDataCollector.ActiveDirectory
 
             return !Convert.ToBoolean(flags & 0x0002);
         }
+
+        public List<ADUser> GetAllDialInUsers()
+        {
+            List<ADUser> returnMe = new List<ADUser>();
+
+            using (DirectoryEntry root = new DirectoryEntry())
+            {
+                using (DirectorySearcher searcher = new DirectorySearcher(root))
+                {
+                    searcher.Filter = "(msNPAllowDialin=TRUE)";
+                    searcher.PropertiesToLoad.Add("givenName");
+                    searcher.PropertiesToLoad.Add("sn");
+                    searcher.PropertiesToLoad.Add("sAMAccountName");
+                    searcher.PropertiesToLoad.Add("comment");
+                    searcher.PropertiesToLoad.Add("description");
+                    searcher.PropertiesToLoad.Add("whenCreated");
+                    searcher.PropertiesToLoad.Add("mail");
+                    searcher.PropertiesToLoad.Add("userAccountControl");
+                    searcher.PropertiesToLoad.Add("distinguishedName");
+
+                    SearchResultCollection adSearchResults = searcher.FindAll();
+
+                    foreach (SearchResult adSearchResult in adSearchResults)
+                    {
+                        if (adSearchResult != null)
+                        {
+                            // Get the directoryentry
+                            DirectoryEntry user = adSearchResult.GetDirectoryEntry();
+
+                            returnMe.Add(new ADUser()
+                            {
+                                GivenName = (string) user.Properties["givenName"].Value,
+                                SN = (string) user.Properties["sn"].Value,
+                                sAMAccountName = (string) user.Properties["sAMAccountName"].Value,
+                                comment = (string) user.Properties["comment"].Value,
+                                description = (string) user.Properties["description"].Value,
+                                IsEnabled = IsActive(user),
+                                DateCreated = ((DateTime) user.Properties["whenCreated"].Value).ToString(),
+                                DistinguishedName = (string) user.Properties["distinguishedName"].Value,
+                                Mail = (string) user.Properties["mail"].Value
+                            });
+
+                        }
+                    }
+                }
+            }
+            return returnMe.OrderBy(u => u.sAMAccountName).ToList();
+        } 
 
     }
 }

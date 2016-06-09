@@ -7,8 +7,8 @@ namespace LSKYDashboardDataCollector.ActiveDirectory
 {
     public class ADUser
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string GivenName { get; set; }
+        public string SN { get; set; }
         public string sAMAccountName { get; set; }
         public string comment { get; set; }
         public string description { get; set; }
@@ -21,8 +21,8 @@ namespace LSKYDashboardDataCollector.ActiveDirectory
         public override string ToString()
         {
             return " {ADUSER " +
-                   "givenName: " + this.FirstName + ", " +
-                   "sn: " + this.LastName + ", " +
+                   "givenName: " + this.GivenName + ", " +
+                   "sn: " + this.SN + ", " +
                    "sAMAccountName: " + this.sAMAccountName + ", " +
                    "Enabled: " + this.IsEnabled + ", " +
                    "LastLogon: " + this.LastLogon + ", " +
