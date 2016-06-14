@@ -52,10 +52,20 @@ namespace LSKYDashboardDataCollector
         {
             get { return System.Configuration.ConfigurationManager.AppSettings["ad_password"].ToString(); }
         }
-        
+
         public static string GetiBossURL()
         {
             return System.Configuration.ConfigurationManager.AppSettings["iboss_url"].ToString();
+        }
+
+        public static string GetPhotoGalleryRootFileSystemDirectory()
+        {
+            return System.Configuration.ConfigurationManager.AppSettings["photos_root_actual_path"].ToString();
+        }
+
+        public static string GetPhotoGalleryRootWebDirectory()
+        {
+            return System.Configuration.ConfigurationManager.AppSettings["photos_root_web_path"].ToString();
         }
 
         public static string GetiBossUsername()

@@ -35,7 +35,20 @@
       An example of a value would be "\\127.0.0.1\CiscoLogs"
     -->
     <add key="cisco_wireless_path" value="" />
-   
+
+
+    <!-- Credentials for Active Directory -->
+
+    <add key="ad_username" value=""/>
+    <add key="ad_password" value=""/>
+    <add key="vpn_ad_group" value=""/> <!-- The DistinguishedName of the AD group you'd like to get the members of -->
+
+    <!-- Photo gallery root folder path, from the perspective of the web server -->
+    <add key="photos_root_web_path" value=""/>
+    
+    <!-- Photo gallery root folder path, from the perspetive of the file system-->
+    <add key="photos_root_actual_path" value=""/>
+    
     <!-- 
       Jira projects to load
       Project names, as a list of strings, seperated by semicolens

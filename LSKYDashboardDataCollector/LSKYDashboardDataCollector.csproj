@@ -70,6 +70,7 @@
   <ItemGroup>
     <Content Include="ActiveDirectory\VPNAccounts.aspx" />
     <Content Include="CiscoWireless\WirelessClients.aspx" />
+    <Content Include="FileSystem\PhotoGallery.aspx" />
     <Content Include="General\JSONClientInfo.aspx" />
     <Content Include="General\JSONTime.aspx" />
     <Content Include="Internet\index.aspx" />
@@ -96,6 +97,14 @@
     <Compile Include="Common\CommonFunctions.cs" />
     <Compile Include="Common\CommonJSONParts.cs" />
     <Compile Include="Common\Extensions.cs" />
+    <Compile Include="FileSystem\PhotoDirectoryRepository.cs" />
+    <Compile Include="FileSystem\PhotoGallery.aspx.cs">
+      <DependentUpon>PhotoGallery.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="FileSystem\PhotoGallery.aspx.designer.cs">
+      <DependentUpon>PhotoGallery.aspx</DependentUpon>
+    </Compile>
     <Compile Include="General\JSONClientInfo.aspx.cs">
       <DependentUpon>JSONClientInfo.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
