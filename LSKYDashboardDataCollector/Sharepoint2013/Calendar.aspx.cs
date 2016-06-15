@@ -94,8 +94,19 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
                     eventsToday.Add(ce);
                 }
 
-                // Tomorrow
-                if ((ce.EventStart >= DateTime.Today.AddDays(1)) && (ce.EventStart <= DateTime.Today.AddDays(2).AddMinutes(-1)))
+                // Tomorrow - Or more specifically, next business day
+                DateTime nextBusinessDay = DateTime.Today.AddDays(1);
+                if (nextBusinessDay.DayOfWeek == DayOfWeek.Saturday)
+                {
+                    nextBusinessDay += new TimeSpan(2, 0, 0, 0);
+                }
+
+                if (nextBusinessDay.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    nextBusinessDay += new TimeSpan(1, 0, 0, 0);
+                }
+
+                if ((ce.EventStart >= nextBusinessDay) && (ce.EventStart <= nextBusinessDay.AddDays(1).AddMinutes(-1)))
                 {
                     eventsTomorrow.Add(ce);
                 }
