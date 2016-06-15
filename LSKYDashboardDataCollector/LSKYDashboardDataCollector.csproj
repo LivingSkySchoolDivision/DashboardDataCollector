@@ -162,7 +162,6 @@
     </Compile>
     <Compile Include="Jira\TicketsByFacility.aspx.cs">
       <DependentUpon>TicketsByFacility.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Jira\TicketsByFacility.aspx.designer.cs">
       <DependentUpon>TicketsByFacility.aspx</DependentUpon>

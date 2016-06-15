@@ -89,25 +89,25 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
             foreach (SharepointCalendarEvent ce in allEvents) /* disregard events that happened in the past */
             {
                 // Today
-                if ((ce.EventStart > DateTime.Today) && (ce.EventStart < DateTime.Today.AddDays(1)))
+                if ((ce.EventStart >= DateTime.Today) && (ce.EventStart <= DateTime.Today.AddDays(1).AddMinutes(-1)))
                 {
                     eventsToday.Add(ce);
                 }
 
                 // Tomorrow
-                if ((ce.EventStart > DateTime.Today.AddDays(1)) && (ce.EventStart < DateTime.Today.AddDays(2)))
+                if ((ce.EventStart >= DateTime.Today.AddDays(1)) && (ce.EventStart <= DateTime.Today.AddDays(2).AddMinutes(-1)))
                 {
                     eventsTomorrow.Add(ce);
                 }
 
                 // Events happening now
-                if ((ce.EventStart < DateTime.Now) && (ce.EventEnd > DateTime.Now))
+                if ((ce.EventStart <= DateTime.Now) && (ce.EventEnd >= DateTime.Now))
                 {
                     eventsRightNow.Add(ce);
                 }
 
                 // Events upcoming (because sharepoint likes to list events in the past for some reason?
-                if (ce.EventStart > DateTime.Now)
+                if (ce.EventStart >= DateTime.Now)
                 {
                     eventsUpcoming.Add(ce);
                 }

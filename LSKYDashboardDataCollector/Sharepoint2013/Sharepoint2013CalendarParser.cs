@@ -96,19 +96,26 @@ namespace LSKYDashboardDataCollector.Sharepoint2013
                     };
 
                     bool isTimeGMT = true; // Previously we would have had to check the times to see if they are sane, but I think when loading data this way, all times are UTC instead
+                    // Events that are "all day" events don't need to be adjusted because they are just 0:00 to 23:59. Adjusting them will set them into the previous day and mess things up.
 
-                    // Times returned are all in UTC - adjust to local time
-                    if (isTimeGMT)
-                    {
-                        eventStarts = eventStarts + TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now);
-                        eventEnds = eventEnds + TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now);
-                    }
-
+                    // Determine if this is an "all day" event.
                     bool allDay = false;
                     if (item.FieldValues.ContainsKey("fAllDayEvent"))
                     {
                         allDay = Parsers.ParseBool(item["fAllDayEvent"].ToString());
                     }
+
+                    // Times returned are all in UTC - adjust to local time
+                    if (isTimeGMT)
+                    {
+                        if (!allDay)
+                        {
+                            eventStarts = eventStarts + TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now);
+                            eventEnds = eventEnds + TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now);
+                        }
+                    }
+
+                    
 
                     bool recurring = false;
                     if (item.FieldValues.ContainsKey("fRecurrence"))
