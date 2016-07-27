@@ -60,10 +60,11 @@
 
   <connectionStrings>
   
-    <!--
-        Connection string to access the SysAid database
-      -->
+    <!-- Connection string to access the SysAid database -->
     <add name="Jira" connectionString="CONNECTIONSTRINGGOESHERE" providerName="System.Data.SqlClient" />
+    
+    <!-- Credentials for FleetVision database -->
+    <add name="FleetVision" connectionString="CONNECTIONSTRINGGOESHERE" providerName="System.Data.SqlClient" />
   </connectionStrings>
 
 </configuration>

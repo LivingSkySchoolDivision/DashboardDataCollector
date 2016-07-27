@@ -96,10 +96,10 @@ namespace LSKYDashboardDataCollector.Jira
                 {
                     while (dbDataReader.Read())
                     {
-                        JiraIssue loadedSchool = SQLDataReaderToJiraIssue(dbDataReader);
-                        if (loadedSchool != null)
+                        JiraIssue loadedIssue = SQLDataReaderToJiraIssue(dbDataReader);
+                        if (loadedIssue != null)
                         {
-                            returnMe.Add(loadedSchool);
+                            returnMe.Add(loadedIssue);
                         }
                     }
                 }

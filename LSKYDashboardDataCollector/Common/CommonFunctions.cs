@@ -28,8 +28,9 @@ namespace LSKYDashboardDataCollector.Common
 
         public static string escapeCharacters(string input)
         {
-            return input.Replace('"', '\'');
+            return input.Replace('"', '\'').Replace("\r\n"," ").Replace("\n"," ");
         }
+
         public static bool ParseBool(string thisValue)
         {
             if (String.IsNullOrEmpty(thisValue))
