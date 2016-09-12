@@ -29,6 +29,7 @@ namespace LSKYDashboardDataCollector.FleetVision
             Response.ContentEncoding = Encoding.UTF8;
             Response.ContentType = "application/json; charset=utf-8";
             Response.Write("{\n");
+            Response.Write("\"Total\" : " + workOrders.Count + ",\n");
             Response.Write("\"WorkOrders\": [\n");
 
             for (int x = 0; x < workOrders.Count; x++)
