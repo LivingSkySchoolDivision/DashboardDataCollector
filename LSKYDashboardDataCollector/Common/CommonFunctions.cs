@@ -28,7 +28,7 @@ namespace LSKYDashboardDataCollector.Common
 
         public static string escapeCharacters(string input)
         {
-            return input.Replace('"', '\'').Replace("\r\n"," ").Replace("\n"," ");
+            return input.Replace('"', '\'').Replace("\r\n"," ").Replace("\n"," ").Replace("\\", "\\\\");
         }
 
         public static bool ParseBool(string thisValue)

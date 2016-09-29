@@ -17,14 +17,8 @@ namespace LSKYDashboardDataCollector.FleetVision
 
             FleetVisionWorkOrderRepository repository = new FleetVisionWorkOrderRepository();
 
-            workOrders = repository.GetRecentIncomplete(10);
-
-            foreach (FleetVisionWorkOrder wo in workOrders)
-            {
-                Response.Write("<BR>" + wo.ID + ": " + wo.Status + " - " + wo.WorkRequested);
-            }
-
-
+            workOrders = repository.GetRecentIncomplete(50);
+            
             Response.Clear();
             Response.ContentEncoding = Encoding.UTF8;
             Response.ContentType = "application/json; charset=utf-8";
@@ -34,13 +28,31 @@ namespace LSKYDashboardDataCollector.FleetVision
 
             for (int x = 0; x < workOrders.Count; x++)
             {
+                if (workOrders[x].Vehicle != null) { }
                 Response.Write("{");
-                Response.Write("\"id\" : \"" + workOrders[x].ID + "\",");
+                Response.Write("\"RecordID\" : \"" + workOrders[x].RecordID + "\",");
                 Response.Write("\"number\" : \"" + workOrders[x].WorkOrderNumber + "\",");
                 Response.Write("\"createdby\" : \"" + workOrders[x].CreatedBy + "\",");
                 Response.Write("\"status\" : \"" + workOrders[x].Status + "\",");
                 Response.Write("\"timesince\" : \"" + Helpers.TimeSince(workOrders[x].DateCreated) + "\",");
-                Response.Write("\"workrequested\" : \"" + CommonFunctions.escapeCharacters(workOrders[x].WorkRequested) + "\"");
+                Response.Write("\"priority\" : \"" + CommonFunctions.escapeCharacters(workOrders[x].Priority) + "\",");
+                Response.Write("\"status\" : \"" + CommonFunctions.escapeCharacters(workOrders[x].Status) + "\",");
+                Response.Write("\"workrequested\" : \"" + CommonFunctions.escapeCharacters(workOrders[x].WorkRequested) + "\",");
+
+                string vehicle = "NONE";
+                string plate = string.Empty;
+                string vin = string.Empty;
+
+                if (workOrders[x].Vehicle != null)
+                {
+                    vehicle = workOrders[x].Vehicle.ID;
+                    plate = workOrders[x].Vehicle.Plate;
+                    vin = workOrders[x].Vehicle.VIN;
+                }
+                Response.Write("\"vehicleID\" : \"" + CommonFunctions.escapeCharacters(workOrders[x].VehicleRecordID.ToString()) + "\",");
+                Response.Write("\"vehicle\" : \"" + CommonFunctions.escapeCharacters(vehicle) + "\",");
+                Response.Write("\"licenseplate\" : \"" + CommonFunctions.escapeCharacters(plate) + "\",");
+                Response.Write("\"vin\" : \"" + CommonFunctions.escapeCharacters(vin) + "\"");
                 
                 Response.Write("}");
 

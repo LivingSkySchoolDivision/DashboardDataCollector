@@ -24,7 +24,6 @@ namespace LSKYDashboardDataCollector.FleetVision
                                              "WorkOrders.Odometer, " +
                                              "WorkOrders.PartsTotal, " +
                                              "WorkOrders.LaborTotal, " +
-                                             "WorkOrders.Priority, " +
                                              "WorkOrders.EstDateTime, " +
                                              "WorkOrders.CreatedTime, " +
                                              "WorkOrders.UpdatedTime, " +
@@ -33,22 +32,32 @@ namespace LSKYDashboardDataCollector.FleetVision
                                              "WorkOrders.InvoiceNumber, " +
                                              "WorkOrders.WorkRequested, " +
                                              "WorkOrders.WorkPfmd, " +
-                                             "WorkOrders.RequestBy " +
-                                         "FROM WorkOrders LEFT OUTER JOIN " +
-                                             "vtUser AS vtUser_2 ON WorkOrders.UpdatedBy = vtUser_2.ID LEFT OUTER JOIN " +
-                                             "vtUser AS vtUser_1 ON WorkOrders.CreatedBy = vtUser_1.ID LEFT OUTER JOIN " +
-                                             "Lists AS Lists_1 ON WorkOrders.Status = Lists_1.ItemId ";
+                                             "WorkOrders.RequestBy, " +
+                                             "Lists_2.Item as Priority " +
+                                         "FROM WorkOrders " +
+                                         "LEFT OUTER JOIN vtUser AS vtUser_2 ON WorkOrders.UpdatedBy = vtUser_2.ID " +
+                                         "LEFT OUTER JOIN vtUser AS vtUser_1 ON WorkOrders.CreatedBy = vtUser_1.ID " +
+                                         "LEFT OUTER JOIN Lists AS Lists_1 ON WorkOrders.Status = Lists_1.ItemId " +
+                                         "LEFT OUTER JOIN Lists AS Lists_2 ON WorkOrders.Priority = Lists_2.ItemId ";
 
         private readonly Dictionary<int, FleetVisionWorkOrder> _cache;
+        private readonly FleetVisionVehicleRepository _vehicleRepository;
 
         private FleetVisionWorkOrder dataReaderToWorkOrder(SqlDataReader dataReader)
         {
+            string priority = dataReader["Priority"].ToString().Trim();
+
+            if (string.IsNullOrEmpty(priority))
+            {
+                priority = "None";
+            }
+
             return new FleetVisionWorkOrder()
             {
-                ID = Parsers.ParseInt(dataReader["RecordID"].ToString().Trim()),
+                RecordID = Parsers.ParseInt(dataReader["RecordID"].ToString().Trim()),
                 WorkOrderNumber = dataReader["WONumber"].ToString().Trim(),
                 RequestBy = dataReader["RequestBy"].ToString().Trim(),
-                VehicleID = Parsers.ParseInt(dataReader["VehKey"].ToString().Trim()),
+                VehicleRecordID = Parsers.ParseInt(dataReader["VehKey"].ToString().Trim()),
                 WorkRequested = dataReader["WorkRequested"].ToString().Trim(),
                 Status = dataReader["WOStatus"].ToString().Trim(),
                 EstDateTime = Parsers.ParseDate(dataReader["EstDateTime"].ToString().Trim()),
@@ -59,12 +68,15 @@ namespace LSKYDashboardDataCollector.FleetVision
                 LastUpdated = Parsers.ParseDate(dataReader["UpdatedTime"].ToString().Trim()),
                 ShopFee = Parsers.ParseDecimal(dataReader["ShopFee"].ToString().Trim()),
                 InvoiceNumber = dataReader["InvoiceNumber"].ToString().Trim(),
-                DateCreated = Parsers.ParseDate(dataReader["CreatedTime"].ToString().Trim())
+                DateCreated = Parsers.ParseDate(dataReader["CreatedTime"].ToString().Trim()),
+                _priority = priority,
+                Vehicle = _vehicleRepository.Get(Parsers.ParseInt(dataReader["VehKey"].ToString().Trim()))
             };
         }
 
         public FleetVisionWorkOrderRepository()
         {
+            _vehicleRepository = new FleetVisionVehicleRepository();
             _cache = new Dictionary<int, FleetVisionWorkOrder>();
 
             using (SqlConnection connection = new SqlConnection(Settings.DBConnectionString_FleetVision))
@@ -85,7 +97,7 @@ namespace LSKYDashboardDataCollector.FleetVision
                         FleetVisionWorkOrder workOrder = dataReaderToWorkOrder(dbDataReader);
                         if (workOrder != null)
                         {
-                            _cache.Add(workOrder.ID, workOrder);
+                            _cache.Add(workOrder.RecordID, workOrder);
                         }
                     }
                 }

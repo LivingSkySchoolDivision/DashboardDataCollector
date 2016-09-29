@@ -7,10 +7,10 @@ namespace LSKYDashboardDataCollector.FleetVision
 {
     public class FleetVisionWorkOrder
     {
-        public int ID { get; set; }
+        public int RecordID { get; set; }
         public string WorkOrderNumber { get; set; }
         public string RequestBy { get; set; }
-        public int VehicleID { get; set; }
+        public int VehicleRecordID { get; set; }
         public string WorkRequested { get; set; }
         public string Status { get; set; }
         public DateTime EstDateTime { get; set; }
@@ -22,7 +22,11 @@ namespace LSKYDashboardDataCollector.FleetVision
         public DateTime LastUpdated { get; set; }
         public decimal ShopFee { get; set; }
         public string InvoiceNumber { get; set; }
+        public string _priority { get; set; }
+        public string Priority => string.IsNullOrEmpty(this._priority) ? "None" : _priority;
 
         public bool IsClosed => this.Status.ToLower().Equals("completed");
+
+        public FleetVisionVehicle Vehicle { get; set; }
     }
 }
