@@ -37,7 +37,7 @@ namespace LSKYDashboardDataCollector.FleetVision
                 Response.Write("\"timesince\" : \"" + Helpers.TimeSince(workOrders[x].DateCreated) + "\",");
                 Response.Write("\"priority\" : \"" + CommonFunctions.escapeCharacters(workOrders[x].Priority) + "\",");
                 Response.Write("\"status\" : \"" + CommonFunctions.escapeCharacters(workOrders[x].Status) + "\",");
-                Response.Write("\"workrequested\" : \"" + CommonFunctions.escapeCharacters(workOrders[x].WorkRequested) + "\",");
+                Response.Write("\"workrequested\" : \"" + CommonFunctions.escapeCharacters(workOrders[x].WorkRequested.Replace("\r\n", ", ")) + "\",");
 
                 string vehicle = "NONE";
                 string plate = string.Empty;

@@ -126,7 +126,6 @@
     <Content Include="CiscoWireless\WirelessClients.aspx" />
     <Content Include="FileSystem\PhotoGallery.aspx" />
     <Content Include="FleetVision\NewestWorkOrders.aspx" />
-    <Content Include="FleetVision\OpenWorkOrdersByPriority.aspx" />
     <Content Include="FleetVision\WorkOrderCounts.aspx" />
     <Content Include="General\JSONClientInfo.aspx" />
     <Content Include="General\JSONTime.aspx" />
@@ -172,13 +171,6 @@
     </Compile>
     <Compile Include="FleetVision\NewestWorkOrders.aspx.designer.cs">
       <DependentUpon>NewestWorkOrders.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="FleetVision\OpenWorkOrdersByPriority.aspx.cs">
-      <DependentUpon>OpenWorkOrdersByPriority.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="FleetVision\OpenWorkOrdersByPriority.aspx.designer.cs">
-      <DependentUpon>OpenWorkOrdersByPriority.aspx</DependentUpon>
     </Compile>
     <Compile Include="FleetVision\WorkOrderCounts.aspx.cs">
       <DependentUpon>WorkOrderCounts.aspx</DependentUpon>
