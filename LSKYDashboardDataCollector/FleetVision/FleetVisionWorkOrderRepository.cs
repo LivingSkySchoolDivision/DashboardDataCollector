@@ -70,7 +70,8 @@ namespace LSKYDashboardDataCollector.FleetVision
                 InvoiceNumber = dataReader["InvoiceNumber"].ToString().Trim(),
                 DateCreated = Parsers.ParseDate(dataReader["CreatedTime"].ToString().Trim()),
                 _priority = priority,
-                Vehicle = _vehicleRepository.Get(Parsers.ParseInt(dataReader["VehKey"].ToString().Trim()))
+                Vehicle = _vehicleRepository.Get(Parsers.ParseInt(dataReader["VehKey"].ToString().Trim())),
+                InDateTime = Parsers.ParseDate(dataReader["InDateTime"].ToString().Trim())
             };
         }
 
