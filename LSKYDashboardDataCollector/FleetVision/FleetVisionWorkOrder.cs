@@ -24,7 +24,7 @@ namespace LSKYDashboardDataCollector.FleetVision
         public decimal ShopFee { get; set; }
         public string InvoiceNumber { get; set; }
         public string _priority { get; set; }
-        public string Priority => string.IsNullOrEmpty(this._priority) ? "None" : _priority;
+        public string Priority => string.IsNullOrEmpty(this._priority) ? string.Empty : _priority;
 
         public int PrioritySortOrder
         {
@@ -47,16 +47,16 @@ namespace LSKYDashboardDataCollector.FleetVision
             }
         }
 
-        public string VehicleNumberForSorting
+        public int VehicleNumberForSorting
         {
             get
             {
                 if (this.Vehicle != null)
                 {
-                    return this.Vehicle.VehicleNumber;
+                    return Parsers.ParseInt(this.Vehicle.VehicleNumber);
                 }
 
-                return "zzzzzzzzzzzzzzzzzzzzzzzzzzzz";
+                return 9999;
             }
         }
 

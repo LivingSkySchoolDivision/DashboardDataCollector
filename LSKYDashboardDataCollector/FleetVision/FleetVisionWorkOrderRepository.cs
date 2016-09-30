@@ -49,7 +49,7 @@ namespace LSKYDashboardDataCollector.FleetVision
 
             if (string.IsNullOrEmpty(priority))
             {
-                priority = "None";
+                priority = string.Empty;
             }
 
             return new FleetVisionWorkOrder()
