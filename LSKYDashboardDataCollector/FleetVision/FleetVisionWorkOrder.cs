@@ -26,6 +26,40 @@ namespace LSKYDashboardDataCollector.FleetVision
         public string _priority { get; set; }
         public string Priority => string.IsNullOrEmpty(this._priority) ? "None" : _priority;
 
+        public int PrioritySortOrder
+        {
+            get
+            {
+                switch (this.Priority)
+                {
+                    case "Immediate - Today":
+                        return 0;
+                        break;
+                    case "Medium - 1 to 2 Day":
+                        return 1;
+                        break;
+                    case "Low":
+                        return 2;
+                        break;
+                }
+
+                return 99;
+            }
+        }
+
+        public string VehicleNumberForSorting
+        {
+            get
+            {
+                if (this.Vehicle != null)
+                {
+                    return this.Vehicle.VehicleNumber;
+                }
+
+                return "zzzzzzzzzzzzzzzzzzzzzzzzzzzz";
+            }
+        }
+
         public bool IsClosed => this.Status.ToLower().Equals("completed");
 
         public FleetVisionVehicle Vehicle { get; set; }

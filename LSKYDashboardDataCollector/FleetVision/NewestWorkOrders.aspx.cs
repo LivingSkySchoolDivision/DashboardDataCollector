@@ -17,7 +17,7 @@ namespace LSKYDashboardDataCollector.FleetVision
 
             FleetVisionWorkOrderRepository repository = new FleetVisionWorkOrderRepository();
 
-            workOrders = repository.GetRecentIncomplete(50).Where(wo => wo.InDateTime <= DateTime.Today.AddDays(1).AddMinutes(-1)).ToList();
+            workOrders = repository.GetRecentIncomplete(50).Where(wo => wo.InDateTime <= DateTime.Today.AddDays(1).AddMinutes(-1)).OrderBy(wo => wo.PrioritySortOrder).ThenBy(wo => wo.VehicleNumberForSorting).ToList();
             
             Response.Clear();
             Response.ContentEncoding = Encoding.UTF8;
@@ -45,7 +45,7 @@ namespace LSKYDashboardDataCollector.FleetVision
 
                 if (workOrders[x].Vehicle != null)
                 {
-                    vehicle = workOrders[x].Vehicle.ID;
+                    vehicle = workOrders[x].Vehicle.VehicleNumber;
                     plate = workOrders[x].Vehicle.Plate;
                     vin = workOrders[x].Vehicle.VIN;
                 }

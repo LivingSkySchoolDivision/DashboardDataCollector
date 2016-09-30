@@ -85,7 +85,7 @@ namespace LSKYDashboardDataCollector.FleetVision
             return new FleetVisionVehicle()
             {
                 RecordID = Parsers.ParseInt(dataReader["RecordID"].ToString().Trim()),
-                ID = dataReader["vehicle"].ToString().Trim(),
+                VehicleNumber = dataReader["vehicle"].ToString().Trim(),
                 Class= dataReader["VehicleClass"].ToString().Trim(),
                 VIN= dataReader["VIN"].ToString().Trim(),
                 Description= dataReader["descript"].ToString().Trim(),

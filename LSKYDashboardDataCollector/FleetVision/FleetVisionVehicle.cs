@@ -8,7 +8,7 @@ namespace LSKYDashboardDataCollector.FleetVision
     public class FleetVisionVehicle
     {
         public int RecordID { get; set; }
-        public string ID { get; set; }
+        public string VehicleNumber { get; set; }
         public string Class { get; set; }
         public string VIN { get; set; }
         public string Description { get; set; }
