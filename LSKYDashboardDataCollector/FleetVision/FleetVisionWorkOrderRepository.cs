@@ -21,6 +21,7 @@ namespace LSKYDashboardDataCollector.FleetVision
                                              "WorkOrders.WONumber, " +
                                              "WorkOrders.VehKey, " +
                                              "WorkOrders.InDateTime, " +
+                                             "WorkOrders.RelDateTime, " +
                                              "WorkOrders.Odometer, " +
                                              "WorkOrders.PartsTotal, " +
                                              "WorkOrders.LaborTotal, " +
@@ -71,7 +72,8 @@ namespace LSKYDashboardDataCollector.FleetVision
                 DateCreated = Parsers.ParseDate(dataReader["CreatedTime"].ToString().Trim()),
                 _priority = priority,
                 Vehicle = _vehicleRepository.Get(Parsers.ParseInt(dataReader["VehKey"].ToString().Trim())),
-                InDateTime = Parsers.ParseDate(dataReader["InDateTime"].ToString().Trim())
+                InDateTime = Parsers.ParseDate(dataReader["InDateTime"].ToString().Trim()),
+                OutDateTime = Parsers.ParseDate(dataReader["RelDateTime"].ToString().Trim())
             };
         }
 

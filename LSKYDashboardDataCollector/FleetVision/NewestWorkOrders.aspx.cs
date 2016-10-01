@@ -17,7 +17,7 @@ namespace LSKYDashboardDataCollector.FleetVision
 
             FleetVisionWorkOrderRepository repository = new FleetVisionWorkOrderRepository();
 
-            workOrders = repository.GetRecentIncomplete(50).Where(wo => wo.Vehicle != null).Where(wo => wo.InDateTime <= DateTime.Today.AddDays(1).AddMinutes(-1)).OrderBy(wo => wo.PrioritySortOrder).ThenBy(wo => wo.VehicleNumberForSorting).ToList();
+            workOrders = repository.GetRecentIncomplete(50).Where(wo => wo.Vehicle != null).Where(wo => wo.OutDateTime == DateTime.MinValue).Where(wo => wo.InDateTime <= DateTime.Today.AddDays(1).AddMinutes(-1)).OrderBy(wo => wo.PrioritySortOrder).ThenBy(wo => wo.VehicleNumberForSorting).ToList();
             
             Response.Clear();
             Response.ContentEncoding = Encoding.UTF8;
@@ -34,6 +34,8 @@ namespace LSKYDashboardDataCollector.FleetVision
                 Response.Write("\"number\" : \"" + workOrders[x].WorkOrderNumber + "\",");
                 Response.Write("\"createdby\" : \"" + workOrders[x].CreatedBy + "\",");
                 Response.Write("\"status\" : \"" + workOrders[x].Status + "\",");
+                Response.Write("\"indate\" : \"" + workOrders[x].InDateTime + "\",");
+                Response.Write("\"outdate\" : \"" + workOrders[x].OutDateTime + "\",");
                 Response.Write("\"timesince\" : \"" + Helpers.TimeSince(workOrders[x].DateCreated) + "\",");
                 Response.Write("\"priority\" : \"" + CommonFunctions.escapeCharacters(workOrders[x].Priority) + "\",");
                 Response.Write("\"status\" : \"" + CommonFunctions.escapeCharacters(workOrders[x].Status) + "\",");

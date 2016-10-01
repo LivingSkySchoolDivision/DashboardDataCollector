@@ -14,6 +14,7 @@ namespace LSKYDashboardDataCollector.FleetVision
         public string WorkRequested { get; set; }
         public string Status { get; set; }
         public DateTime InDateTime { get; set; }
+        public DateTime OutDateTime { get; set; }
         public DateTime EstDateTime { get; set; }
         public string WorkPerformed { get; set; }
         public decimal PartsTotal { get; set; }

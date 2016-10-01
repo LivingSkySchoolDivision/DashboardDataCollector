@@ -18,6 +18,11 @@ namespace LSKYDashboardDataCollector
             get { return ConfigurationManager.ConnectionStrings["FleetVision"].ConnectionString; }
         }
 
+        public static string DBConnectionString_Versatrans
+        {
+            get { return ConfigurationManager.ConnectionStrings["VersaTrans"].ConnectionString; }
+        }
+
         public static List<string> JiraProjectKeysToLoad
         {
             get
