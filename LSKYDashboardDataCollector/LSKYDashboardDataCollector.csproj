@@ -131,7 +131,6 @@
     <Content Include="General\JSONTime.aspx" />
     <Content Include="Internet\index.aspx" />
     <Content Include="iBoss\TopBandwidthUsers.aspx" />
-    <Content Include="Versatrans\CertificationExpiry.aspx" />
     <Content Include="Versatrans\UpcomingBusInspections.aspx" />
   </ItemGroup>
   <ItemGroup>
@@ -285,13 +284,6 @@
     </Compile>
     <Compile Include="Template.Master.designer.cs">
       <DependentUpon>Template.Master</DependentUpon>
-    </Compile>
-    <Compile Include="Versatrans\CertificationExpiry.aspx.cs">
-      <DependentUpon>CertificationExpiry.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Versatrans\CertificationExpiry.aspx.designer.cs">
-      <DependentUpon>CertificationExpiry.aspx</DependentUpon>
     </Compile>
     <Compile Include="Versatrans\UpcomingBusInspections.aspx.cs">
       <DependentUpon>UpcomingBusInspections.aspx</DependentUpon>
