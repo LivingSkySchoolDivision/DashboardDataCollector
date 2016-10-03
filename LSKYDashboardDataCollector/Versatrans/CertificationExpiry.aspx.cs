@@ -13,7 +13,7 @@ namespace LSKYDashboardDataCollector.Versatrans
         {
             VersaTransEmployeeRepository vtemployeeRepo = new VersaTransEmployeeRepository();
 
-            List<VersaTransEmployee> employees = vtemployeeRepo.GetActive();
+            List<VersaTransEmployee> employees = vtemployeeRepo.GetAllActive();
 
             foreach (VersaTransEmployee employee in employees)
             {
@@ -21,12 +21,12 @@ namespace LSKYDashboardDataCollector.Versatrans
                 Response.Write("<BR>&nbsp;&nbsp;<b>Vehicles</b>");
                 foreach (VersaTransVehicle vehicle in employee.Vehicles)
                 {
-                    Response.Write("<BR>&nbsp;&nbsh;&nbsp; Vehicle: " + vehicle.VehicleNumber);
+                    Response.Write("<BR>&nbsp;&nbsp;&nbsp; Vehicle: " + vehicle.VehicleNumber);
                 }
                 Response.Write("<BR>&nbsp;&nbsp;<b>Certifications</b>");
                 foreach (VersatransCertification cert in employee.Certifications)
                 {
-                    Response.Write("<BR>&nbsp;&nbsh;&nbsp; Cert: " + cert.CertificationType + " Expires: " + cert.Expires);
+                    Response.Write("<BR>&nbsp;&nbsp;&nbsp; Cert: " + cert.CertificationType + " Expires: " + cert.Expires);
                 }
             }
 

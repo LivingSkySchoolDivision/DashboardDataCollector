@@ -16,7 +16,7 @@ namespace LSKYDashboardDataCollector.Versatrans
         private string SQLQuery = "SELECT RecordID, LastName, FirstName, EmployeeNo, Active FROM Employees ";
 
 
-        private Dictionary<int, VersaTransEmployee> _cache;
+        private readonly Dictionary<int, VersaTransEmployee> _cache;
         public VersaTransEmployeeRepository()
         {
             _cache = new Dictionary<int, VersaTransEmployee>();

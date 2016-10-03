@@ -118,10 +118,10 @@ namespace LSKYDashboardDataCollector.Versatrans
         {
             return new VersaTransVehicle()
             {
-                RecordID = Parsers.ParseInt(dataReader[""].ToString().Trim()),
-                VehicleNumber = dataReader[""].ToString().Trim(),
-                VIN = dataReader[""].ToString().Trim(),
-                Plate1 = dataReader[""].ToString().Trim()
+                RecordID = Parsers.ParseInt(dataReader["RecordID"].ToString().Trim()),
+                VehicleNumber = dataReader["vehicle"].ToString().Trim(),
+                VIN = dataReader["VIN"].ToString().Trim(),
+                Plate1 = dataReader["plate1"].ToString().Trim()
             };
         }
     }
