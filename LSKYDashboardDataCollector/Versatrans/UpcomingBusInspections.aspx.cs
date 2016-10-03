@@ -17,7 +17,7 @@ namespace LSKYDashboardDataCollector.Versatrans
 
             List<VersaTransEmployee> employees = vtemployeeRepo.GetAllActive();
 
-            
+
             Dictionary<VersatransCertification, VersaTransEmployee> allBusInspections = new Dictionary<VersatransCertification, VersaTransEmployee>();
 
             foreach (VersaTransEmployee employee in employees)
@@ -36,7 +36,7 @@ namespace LSKYDashboardDataCollector.Versatrans
             Dictionary<VersatransCertification, VersaTransEmployee> inspectionsDueThisMonth = new Dictionary<VersatransCertification, VersaTransEmployee>();
             Dictionary<VersatransCertification, VersaTransEmployee> overdueInspections = new Dictionary<VersatransCertification, VersaTransEmployee>();
 
-            DateTime startOfThisMonth= new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            DateTime startOfThisMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             DateTime endOfThisMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
 
             foreach (VersatransCertification cert in allBusInspections.Keys)
@@ -64,7 +64,9 @@ namespace LSKYDashboardDataCollector.Versatrans
             Response.ContentEncoding = Encoding.UTF8;
             Response.ContentType = "application/json; charset=utf-8";
             Response.Write("{\n");
-            //Response.Write("\"Total\" : " + .Count + ",\n");
+            Response.Write("\"MonthName\" : \"" + Helpers.GetMonthName(DateTime.Now.Month) + "\",\n");
+            Response.Write("\"TotalThisMonth\" : " + inspectionsDueThisMonth.Count + ",\n");
+            Response.Write("\"TotalOverdue\" : " + overdueInspections.Count + ",\n");
             Response.Write("\"Overdue\": [\n");
 
             int displaycount = 0;
@@ -92,6 +94,7 @@ namespace LSKYDashboardDataCollector.Versatrans
 
             Response.Write("\"ThisMonth\": [\n");
             displaycount = 0;
+            
             foreach (VersatransCertification cert in inspectionsDueThisMonth.Keys)
             {
                 VersaTransEmployee driver = inspectionsDueThisMonth[cert];
@@ -110,8 +113,11 @@ namespace LSKYDashboardDataCollector.Versatrans
                     }
                     displaycount++;
                 }
+
             }
-            Response.Write("]\n");
+            
+
+        Response.Write("]\n");
 
             Response.Write("}\n");
             Response.End();
