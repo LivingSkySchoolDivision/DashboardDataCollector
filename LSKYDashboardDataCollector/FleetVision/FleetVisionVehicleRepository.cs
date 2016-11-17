@@ -46,7 +46,9 @@ namespace LSKYDashboardDataCollector.FleetVision
                                                  "LEFT OUTER JOIN Lists as Lists1 ON Vehicles.vehclass = Lists1.ItemId " +
                                                  "LEFT OUTER JOIN Lists as Lists2 ON Vehicles.fueltype = Lists2.ItemId " +
                                                  "LEFT OUTER JOIN Lists as Lists3 ON Vehicles.make = Lists3.ItemId " +
-                                                 "LEFT OUTER JOIN Lists as Lists4 ON Vehicles.model = Lists4.ItemId ";
+                                                 "LEFT OUTER JOIN Lists as Lists4 ON Vehicles.model = Lists4.ItemId " +
+                                           "WHERE " +
+                                                 "inactive=0";
 
         public FleetVisionVehicleRepository()
         {
