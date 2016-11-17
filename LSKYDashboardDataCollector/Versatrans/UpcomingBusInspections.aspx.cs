@@ -105,7 +105,7 @@ namespace LSKYDashboardDataCollector.Versatrans
             }
 
             Response.Write("],\n");
-
+            Response.Write("\"ThisMonthName\": \"" + Helpers.GetMonthName(startOfThisMonth.Month) + "\",\n");
             Response.Write("\"ThisMonth\": [\n");
             displaycount = 0;
 
@@ -131,6 +131,7 @@ namespace LSKYDashboardDataCollector.Versatrans
             }
 
             Response.Write("],\n");
+            Response.Write("\"NextMonthName\": \"" + Helpers.GetMonthName(startOfNextMonth.Month) + "\",\n");
             Response.Write("\"NextMonth\": [\n");
             displaycount = 0;
 
