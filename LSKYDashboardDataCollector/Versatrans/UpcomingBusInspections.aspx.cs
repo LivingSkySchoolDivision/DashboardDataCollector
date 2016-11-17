@@ -34,10 +34,14 @@ namespace LSKYDashboardDataCollector.Versatrans
             // Find all certifications expiring on or before the LAST DAY of the current month
 
             Dictionary<VersatransCertification, VersaTransEmployee> inspectionsDueThisMonth = new Dictionary<VersatransCertification, VersaTransEmployee>();
+            Dictionary<VersatransCertification, VersaTransEmployee> inspectionsDueNextMonth = new Dictionary<VersatransCertification, VersaTransEmployee>();
             Dictionary<VersatransCertification, VersaTransEmployee> overdueInspections = new Dictionary<VersatransCertification, VersaTransEmployee>();
 
             DateTime startOfThisMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            DateTime endOfThisMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
+            DateTime endOfThisMonth = new DateTime(startOfThisMonth.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
+
+            DateTime startOfNextMonth = endOfThisMonth.AddDays(1);
+            DateTime endOfNextMonth = new DateTime(startOfNextMonth.Year, startOfNextMonth.Month, DateTime.DaysInMonth(startOfNextMonth.Year, startOfNextMonth.Month));
 
             foreach (VersatransCertification cert in allBusInspections.Keys)
             {
@@ -57,6 +61,16 @@ namespace LSKYDashboardDataCollector.Versatrans
                 {
                     inspectionsDueThisMonth.Add(cert, allBusInspections[cert]);
                 }
+
+                // Next month
+                if (
+                    (cert.Expires >= startOfNextMonth) &&
+                    (cert.Expires <= endOfNextMonth)
+                    )
+                {
+                    inspectionsDueNextMonth.Add(cert, allBusInspections[cert]);
+                }
+
 
             }
 
@@ -94,7 +108,7 @@ namespace LSKYDashboardDataCollector.Versatrans
 
             Response.Write("\"ThisMonth\": [\n");
             displaycount = 0;
-            
+
             foreach (VersatransCertification cert in inspectionsDueThisMonth.Keys)
             {
                 VersaTransEmployee driver = inspectionsDueThisMonth[cert];
@@ -115,9 +129,34 @@ namespace LSKYDashboardDataCollector.Versatrans
                 }
 
             }
-            
 
-        Response.Write("]\n");
+            Response.Write("],\n");
+            Response.Write("\"NextMonth\": [\n");
+            displaycount = 0;
+
+            foreach (VersatransCertification cert in inspectionsDueNextMonth.Keys)
+            {
+                VersaTransEmployee driver = inspectionsDueNextMonth[cert];
+                foreach (VersaTransVehicle vehicle in driver.Vehicles)
+                {
+                    Response.Write("\n{");
+                    Response.Write("\"Vehicle\" : \"" + vehicle.VehicleNumber + "\",");
+                    Response.Write("\"Driver\" : \"" + driver.DisplayName + "\",");
+                    Response.Write("\"Expires\" : \"" + cert.Expires.ToShortDateString() + "\",");
+                    Response.Write("\"Completed\" : \"" + cert.Completed.ToShortDateString() + "\"");
+                    Response.Write("}");
+
+                    if (!(displaycount + 1 >= inspectionsDueNextMonth.Count))
+                    {
+                        Response.Write(",");
+                    }
+                    displaycount++;
+                }
+
+            }
+
+
+            Response.Write("]\n");
 
             Response.Write("}\n");
             Response.End();
