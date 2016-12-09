@@ -16,5 +16,9 @@ namespace LSKYDashboardDataCollector.Versatrans
 
         public int EmployeeID { get; set; }
 
+        public override string ToString()
+        {
+            return "{ ID: " + this.RecordID +" CertificationType: " + this.CertificationType +" Completed: " + this.Completed +" Expires: " + this.Expires +" EmployeeID: " + this.EmployeeID + " }";
+        }
     }
 }

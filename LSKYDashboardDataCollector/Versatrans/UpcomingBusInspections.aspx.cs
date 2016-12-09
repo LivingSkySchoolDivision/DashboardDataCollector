@@ -22,11 +22,15 @@ namespace LSKYDashboardDataCollector.Versatrans
 
             foreach (VersaTransEmployee employee in employees)
             {
-                foreach (VersatransCertification cert in employee.Certifications)
+                // If the employee doesn't have any vehicles associated with them, then the certification is meaningless
+                if (employee.Vehicles.Count > 0)
                 {
-                    if (cert.CertificationType == "bus inspection")
+                    foreach (VersatransCertification cert in employee.Certifications)
                     {
-                        allBusInspections.Add(cert, employee);
+                        if (cert.CertificationType == "bus inspection")
+                        {
+                            allBusInspections.Add(cert, employee);
+                        }
                     }
                 }
             }
@@ -74,12 +78,27 @@ namespace LSKYDashboardDataCollector.Versatrans
 
             }
 
+            // Now go through and remove any inspections that have no valid vehicles associated with them
+            foreach (KeyValuePair<VersatransCertification, VersaTransEmployee> kvp in inspectionsDueThisMonth.Where(i => i.Value.Vehicles.Count <= 0))
+            {
+                inspectionsDueThisMonth.Remove(kvp.Key);
+            }
+
+            foreach (KeyValuePair<VersatransCertification, VersaTransEmployee> kvp in inspectionsDueNextMonth.Where(i => i.Value.Vehicles.Count <= 0))
+            {
+                inspectionsDueThisMonth.Remove(kvp.Key);
+            }
+
+            foreach (KeyValuePair<VersatransCertification, VersaTransEmployee> kvp in overdueInspections.Where(i => i.Value.Vehicles.Count <= 0))
+            {
+                inspectionsDueThisMonth.Remove(kvp.Key);
+            }
+
+
             Response.Clear();
             Response.ContentEncoding = Encoding.UTF8;
             Response.ContentType = "application/json; charset=utf-8";
             Response.Write("{\n");
-            Response.Write("\"MonthName\" : \"" + Helpers.GetMonthName(DateTime.Now.Month) + "\",\n");
-            Response.Write("\"TotalThisMonth\" : " + inspectionsDueThisMonth.Count + ",\n");
             Response.Write("\"TotalOverdue\" : " + overdueInspections.Count + ",\n");
             Response.Write("\"Overdue\": [\n");
 
@@ -106,6 +125,7 @@ namespace LSKYDashboardDataCollector.Versatrans
 
             Response.Write("],\n");
             Response.Write("\"ThisMonthName\": \"" + Helpers.GetMonthName(startOfThisMonth.Month) + "\",\n");
+            Response.Write("\"TotalThisMonth\" : " + inspectionsDueThisMonth.Count + ",\n");
             Response.Write("\"ThisMonth\": [\n");
             displaycount = 0;
 
@@ -132,11 +152,13 @@ namespace LSKYDashboardDataCollector.Versatrans
 
             Response.Write("],\n");
             Response.Write("\"NextMonthName\": \"" + Helpers.GetMonthName(startOfNextMonth.Month) + "\",\n");
+            Response.Write("\"TotalNextMonth\" : " + inspectionsDueNextMonth.Count + ",\n");
             Response.Write("\"NextMonth\": [\n");
             displaycount = 0;
 
             foreach (VersatransCertification cert in inspectionsDueNextMonth.Keys)
             {
+                
                 VersaTransEmployee driver = inspectionsDueNextMonth[cert];
                 foreach (VersaTransVehicle vehicle in driver.Vehicles)
                 {
