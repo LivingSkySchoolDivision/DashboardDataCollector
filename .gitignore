@@ -1,8 +1,5 @@
 # Standard CSharp .hgignore / .gitignore
 
-# use glob syntax.
-syntax: glob
-
 # Build folders
 bin/
 Bin/
